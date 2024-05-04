@@ -11,14 +11,14 @@ tags: [astronomy]     # TAG names should always be lowercase
 
 ### Photometric Frequency Analysis
 
-This objective of this article is to present a detailed description of Photometric frequency analysis and why it is important, along with how do we do data visualization on large datasets. This article contains a few excerpts from scikit-learn [Photometric Frequency Analysis](http://ogrisel.github.io/scikit-learn.org/sklearn-tutorial/tutorial/astronomy/regression.html) post. Also, I used [Data Driven Astronomy](https://www.coursera.org/learn/data-driven-astronomy) as a reference while composing this post.
+This objective of this article is to present a detailed description of Photometric frequency analysis and why it is important, along with how do we do data visualization on large datasets. This article contains a few excerpts from scikit-learn [Photometric Frequency Analysis](https://ogrisel.github.io/scikit-learn.org/sklearn-tutorial/tutorial/astronomy/regression.html) post. Also, I used [Data Driven Astronomy](https://www.coursera.org/learn/data-driven-astronomy) as a reference while composing this post.
 
 In the current standard cosmological model, the universe began nearly 14 billion years ago, in an explosive event commonly known as the Big Bang. Since then, the very fabric of space has been expanding, so that distant galaxies appear to be moving away from us at very fast speeds. The uniformity of this expansion means that there is a relationship between the distance to a galaxy, and the speed that it appears to be receding from us. This recession speed leads to a shift in the frequency of photons, very similar to the audio doppler shift that can be heard when a car blaring its horn passes by. If a galaxy were moving toward us, its light would be shifted to higher frequencies, or blue-shifted. Because the universe is expanding away from us, distant galaxies appear to be red-shifted: their photons are shifted to lower frequencies. 
 
 
 We're going to use decision trees to determine the redshifts of galaxies from their photometric colors. We'll use galaxies whose accurate spectroscopic redshifts have been calculated as our gold standard
 
-We will be using flux magnitudes from the [Sloan Digital Sky Survey](http://www.sdss.org/) (SDSS) catalogue to create color indices. Flux magnitudes are the total flux (or light) received in five frequency bands (*u*, *g*, *r*, *i* and *z*).
+We will be using flux magnitudes from the [Sloan Digital Sky Survey](https://www.sdss.org/) (SDSS) catalogue to create color indices. Flux magnitudes are the total flux (or light) received in five frequency bands (*u*, *g*, *r*, *i* and *z*).
 
 ![](/assets/img/photometric/sdss_filters.png)
 
