@@ -3,7 +3,10 @@ title: Photometric Frequency Analysis
 date: 2020-05-04 10:10:25 +05:30
 categories: [ASTRONOMY]
 tags: [astronomy]     # TAG names should always be lowercase
+image: /assets/img/photometric/main.png
 ---
+
+
 
 
 ![Image](/assets/img/photometric/main.png)
