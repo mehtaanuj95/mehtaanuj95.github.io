@@ -6,12 +6,6 @@ tags: [astronomy]     # TAG names should always be lowercase
 image: /assets/img/photometric/main.png
 ---
 
-
-
-
-![Image](/assets/img/photometric/main.png)
-
-
 ### Photometric Frequency Analysis
 
 This objective of this article is to present a detailed description of Photometric frequency analysis and why it is important, along with how do we do data visualization on large datasets. This article contains a few excerpts from scikit-learn [Photometric Frequency Analysis](https://ogrisel.github.io/scikit-learn.org/sklearn-tutorial/tutorial/astronomy/regression.html) post. Also, I used [Data Driven Astronomy](https://www.coursera.org/learn/data-driven-astronomy) as a reference while composing this post.
