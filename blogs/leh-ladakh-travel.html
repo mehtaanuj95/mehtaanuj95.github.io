@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leh Ladakh – A (Slightly Bumpy) Ride to the Roof of the World! | Blog</title>
+    <meta name="description"
+        content="A whirlwind family trip to Leh and Ladakh — engine troubles, Khardung La, Pangong Lake, stargazing at Hanle, and the magic of India's highest roads.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        /* --- CSS VARIABLES --- */
+        :root {
+            --bg-body: #fafafa;
+            --bg-white: #ffffff;
+            --bg-neutral-100: #f5f5f5;
+            --bg-neutral-900: #171717;
+            --text-900: #171717;
+            --text-700: #404040;
+            --text-600: #525252;
+            --text-500: #737373;
+            --text-400: #a3a3a3;
+            --text-300: #d4d4d4;
+            --border-100: #f5f5f5;
+            --border-200: #e5e5e5;
+            --border-300: #d4d4d4;
+            --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        }
+
+        /* --- RESET --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-900);
+            font-family: var(--font-sans);
+            line-height: 1.8;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        ::selection {
+            background-color: #dbeafe;
+            color: #1e3a5f;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* --- TOP NAV --- */
+        .top-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(250, 250, 250, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-200);
+            padding: 0 1.5rem;
+        }
+
+        .top-nav-inner {
+            max-width: 720px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 56px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-500);
+            transition: color 0.2s ease;
+        }
+
+        .back-link:hover {
+            color: var(--text-900);
+        }
+
+        .nav-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-400);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 50%;
+        }
+
+        /* --- HERO --- */
+        .hero {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 21/9;
+            overflow: hidden;
+            background: var(--bg-neutral-900);
+        }
+
+        .hero img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.7;
+            transition: transform 0.6s ease;
+        }
+
+        .hero:hover img {
+            transform: scale(1.02);
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom,
+                    rgba(23, 23, 23, 0.1) 0%,
+                    rgba(23, 23, 23, 0.5) 50%,
+                    rgba(23, 23, 23, 0.85) 100%);
+        }
+
+        .hero-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 2rem 1.5rem;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 768px) {
+            .hero-content {
+                padding: 3rem 1.5rem;
+            }
+        }
+
+        .hero-tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .hero h1 {
+            color: #fff;
+            font-size: 1.75rem;
+            font-weight: 800;
+            line-height: 1.2;
+            letter-spacing: -0.025em;
+            margin-bottom: 0.75rem;
+        }
+
+        @media (min-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        .hero-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .hero-meta-dot {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* --- ARTICLE --- */
+        .article-wrapper {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem 4rem;
+        }
+
+        @media (min-width: 768px) {
+            .article-wrapper {
+                padding: 4rem 1.5rem 6rem;
+            }
+        }
+
+        .article-body h2 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-900);
+            margin: 3rem 0 1rem;
+            letter-spacing: -0.025em;
+            line-height: 1.3;
+        }
+
+        .article-body h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-900);
+            margin: 2.5rem 0 0.75rem;
+            letter-spacing: -0.015em;
+        }
+
+        .article-body h4 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text-900);
+            margin: 2rem 0 0.5rem;
+        }
+
+        .article-body p {
+            color: var(--text-700);
+            font-size: 1.05rem;
+            line-height: 1.85;
+            margin-bottom: 1.5rem;
+        }
+
+        /* --- LEAD PARAGRAPH --- */
+        .lead {
+            font-size: 1.15rem;
+            color: var(--text-600);
+            border-left: 3px solid var(--bg-neutral-900);
+            padding-left: 1.25rem;
+            margin-bottom: 2.5rem;
+            line-height: 1.8;
+        }
+
+        /* --- BLOCKQUOTE --- */
+        .article-body blockquote {
+            margin: 2.5rem 0;
+            padding: 2rem 2rem 2rem 1.75rem;
+            background: linear-gradient(135deg, var(--bg-neutral-100) 0%, var(--bg-white) 100%);
+            border-left: 4px solid var(--bg-neutral-900);
+            border-radius: 0 1rem 1rem 0;
+            position: relative;
+        }
+
+        .article-body blockquote::before {
+            content: '"';
+            position: absolute;
+            top: 0.25rem;
+            left: 0.75rem;
+            font-size: 4rem;
+            font-family: Georgia, serif;
+            color: var(--text-300);
+            line-height: 1;
+        }
+
+        .article-body blockquote p {
+            color: var(--text-700);
+            font-size: 1.1rem;
+            font-style: italic;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            padding-top: 1rem;
+        }
+
+        .article-body blockquote cite {
+            display: block;
+            font-style: normal;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-500);
+            margin-top: 0.5rem;
+        }
+
+        /* --- INLINE IMAGE --- */
+        .article-image {
+            margin: 2.5rem 0;
+            border-radius: 1rem;
+            overflow: hidden;
+            border: 1px solid var(--border-200);
+            background: var(--bg-white);
+        }
+
+        .article-image img {
+            width: 100%;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+
+        .article-image:hover img {
+            transform: scale(1.01);
+        }
+
+        .article-image figcaption {
+            padding: 0.75rem 1.25rem;
+            font-size: 0.8rem;
+            color: var(--text-500);
+            text-align: center;
+            border-top: 1px solid var(--border-100);
+            font-weight: 500;
+        }
+
+        /* --- LISTS --- */
+        .article-body ul,
+        .article-body ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-700);
+        }
+
+        .article-body li {
+            font-size: 1.05rem;
+            line-height: 1.85;
+            margin-bottom: 0.5rem;
+            padding-left: 0.25rem;
+        }
+
+        .article-body li strong {
+            color: var(--text-900);
+        }
+
+        /* --- CALLOUT BOX --- */
+        .callout {
+            margin: 2.5rem 0;
+            padding: 1.5rem 1.75rem;
+            border-radius: 1rem;
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .callout-blue {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+        }
+
+        .callout-blue p {
+            color: #1e40af;
+        }
+
+        .callout-blue strong {
+            color: #1e3a8a;
+        }
+
+        .callout-amber {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+        }
+
+        .callout-amber p {
+            color: #92400e;
+        }
+
+        .callout-amber strong {
+            color: #78350f;
+        }
+
+        .callout-green {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+        }
+
+        .callout-green p {
+            color: #166534;
+        }
+
+        .callout-green strong {
+            color: #14532d;
+        }
+
+        .callout-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            margin-top: 0.1rem;
+        }
+
+        .callout p {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 0;
+        }
+
+        /* --- DIVIDER --- */
+        .article-divider {
+            border: none;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--border-200), transparent);
+            margin: 3rem 0;
+        }
+
+        /* --- TAGS --- */
+        .article-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 2.5rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-200);
+        }
+
+        .article-tag {
+            padding: 0.35rem 0.85rem;
+            background: var(--bg-white);
+            border: 1px solid var(--border-200);
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-600);
+            transition: all 0.2s ease;
+        }
+
+        .article-tag:hover {
+            border-color: var(--text-900);
+            color: var(--text-900);
+        }
+
+        /* --- BOTTOM NAV --- */
+        .bottom-nav {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 1.5rem 4rem;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-neutral-900);
+            color: #fff;
+            border-radius: 0.75rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .back-btn:hover {
+            background: #262626;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        /* --- FOOTER --- */
+        .blog-footer {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 3rem;
+            border-top: 1px solid var(--border-200);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-500);
+        }
+
+        @media (min-width: 640px) {
+            .blog-footer {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+        }
+
+        .blog-footer-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .blog-footer-links a {
+            transition: color 0.2s ease;
+        }
+
+        .blog-footer-links a:hover {
+            color: var(--text-900);
+        }
+
+        /* --- READING PROGRESS BAR --- */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #171717 0%, #525252 100%);
+            z-index: 200;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        /* --- SMOOTH REVEAL ANIMATION --- */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .article-body>* {
+            animation: fadeInUp 0.5s ease both;
+        }
+
+        .article-body>*:nth-child(1) {
+            animation-delay: 0.05s;
+        }
+
+        .article-body>*:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .article-body>*:nth-child(3) {
+            animation-delay: 0.15s;
+        }
+
+        .article-body>*:nth-child(4) {
+            animation-delay: 0.2s;
+        }
+
+        .article-body>*:nth-child(5) {
+            animation-delay: 0.25s;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- READING PROGRESS -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- TOP NAVIGATION -->
+    <nav class="top-nav">
+        <div class="top-nav-inner">
+            <a href="./index.html" class="back-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m15 18-6-6 6-6" />
+                </svg>
+                All Posts
+            </a>
+            <span class="nav-title">Leh Ladakh Travel</span>
+        </div>
+    </nav>
+
+    <!-- HERO BANNER -->
+    <div class="hero">
+        <img src="../media/blogs/ladakh/pangong_2.jpg" alt="Pangong Lake, Ladakh">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <span class="hero-tag">Travel</span>
+            <h1>Leh Ladakh – A (Slightly Bumpy) Ride to the Roof of the World!</h1>
+            <div class="hero-meta">
+                <span>June 18, 2024</span>
+                <span class="hero-meta-dot">&bull;</span>
+                <span>15 min read</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ARTICLE BODY -->
+    <article class="article-wrapper">
+        <div class="article-body">
+
+            <p class="lead">
+                So, here I am, back from a whirlwind family trip to Leh and Ladakh. Let me tell you, it wasn't exactly
+                smooth sailing – literally, from the get-go! Buckle up, because this is a tale of near misses,
+                breathtaking sights, and enough altitude sickness drama to rival a Bollywood movie.
+            </p>
+
+            <!-- DAY 1 -->
+            <h2>Day 1: SpiceJet's "Not-So-Spicy" Curry (Engine Trouble Edition)</h2>
+
+            <p>
+                Our Leh Ladakh adventure began with a bang... or rather, a whoosh. We arrived at Delhi airport bright
+                and early, filled by excitement. We then had a healthy breakfast of dosa, idli, and fresh fruits in the
+                terminal 1 lounge.
+            </p>
+
+            <p>
+                As we boarded our spicejet flight to Leh, we were ready to soar into the mountains. But fate, it seems,
+                had other plans! After about 20 minutes in the air, we heard pilot's voice, announcing that we were
+                returning to Delhi because we'd "left something behind."
+            </p>
+
+            <p>
+                A wave of surprised gasps and nervous chuckles rippled through the crowd. The only thing I could hear
+                over the ominous sound coming from the engine was the muffled prayers of the newlywed guy sitting next
+                to me (honeymoon plans: interrupted!!).
+            </p>
+
+            <p>
+                Landing back in Delhi felt like a scene from an action movie. Two fire trucks were escorting us down the
+                runway, their sirens echoing a dramatic soundtrack to our unexpected return. We waited on the tarmac for
+                some time after which the pilot delivered the shocking news, the plane suffered a bird strike that had
+                damaged right engine. We were hoping the damage would be minor. But alas, the pilot delivered the bad
+                news: the plane was grounded for the day.
+            </p>
+
+            <!-- INLINE IMAGE — FIRETRUCK -->
+            <figure class="article-image">
+                <img src="../media/blogs/ladakh/firetruck.jpg" alt="Fire trucks escorting the plane on the runway">
+                <figcaption>Fire trucks escorting our plane after the emergency landing at Delhi airport</figcaption>
+            </figure>
+
+            <p>
+                Chaos ensued as passengers stormed the arrivals area, demanding answers from the helpless airline staff.
+                To add salt to injury, the airline, shall we say, wasn't exactly forthcoming. They informed us that
+                there would be no overnight accommodations provided. Let's just say, the atmosphere was tenser than a
+                Bollywood family drama.
+            </p>
+
+            <p>
+                After a standoff that could rival any India-Pakistan cricket match, the airline finally relented and
+                booked us on an alternate flight for the next morning.
+            </p>
+
+            <p>
+                We ended up in a good hotel in Aerocity, a stone's throw from the airport. A delicious dinner and some
+                much-needed sleep helped to soothe our frayed nerves. As I drifted off to sleep, I couldn't help but
+                laugh at the irony of it all. Our adventure had barely begun, and already, we had a story to tell.
+                Little did we know that this was just the first of many unexpected twists and turns on our journey to
+                the roof of the world.
+            </p>
+
+            <hr class="article-divider">
+
+            <!-- DAY 2 -->
+            <h2>Day 2: Soaring High (Literally and Figuratively, Thanks to Our Ordeal!)</h2>
+
+            <p>
+                The next day, however, things took a turn for the spectacular. Our flight to Leh offered some seriously
+                stunning views of the Ladakh mountain range – the kind that makes you forget about engine woes and
+                near-death experiences (almost!).
+            </p>
+
+            <!-- INLINE IMAGE — MOUNTAINS FROM PLANE -->
+            <figure class="article-image">
+                <img src="../media/blogs/ladakh/mountains_from_plane.jpg"
+                    alt="Stunning view of Ladakh mountains from the plane">
+                <figcaption>Stunning views of the Ladakh mountain range from our flight to Leh</figcaption>
+            </figure>
+
+            <p>
+                Landing in Leh was like stepping into a different world. The air, a bit cool, was a welcome change from
+                Delhi's summer scorch. After a quick rest, we embarked on our journey to Nubra Valley, conquering the
+                mighty Khardung La Pass, supposedly the second highest motorable road in the world (at a staggering
+                18,379 feet!).
+            </p>
+
+            <p>
+                Khardung La wasn't for the faint of heart. A group of bikers even brought an Indian flag, which we all
+                proudly held – a small act of patriotism that brought a smile to everyone's face, even those battling
+                altitude sickness. The road after the pass was more off-roading adventure than smooth highway, but the
+                sight of majestic brown mountains with the Nubra River snaking alongside was enough to take your breath
+                away (literally, for some in our group who braved the sub-zero temperatures and thin air).
+            </p>
+
+            <h3>A Glimpse into Simple Joys</h3>
+
+            <p>
+                Reaching Nubra Valley was like entering a scene from a National Geographic documentary. The stark beauty
+                of the landscape was only amplified by the sight of a few village children playing amongst themselves.
+                It was a stark contrast to our city lives, where technology and screens seem to consume every waking
+                moment. Here, these kids were a reminder of the simple joys to be found in nature and human connection.
+            </p>
+
+            <!-- INLINE IMAGE — KIDS NUBRA -->
+            <figure class="article-image">
+                <img src="../media/blogs/ladakh/kids_nubra.jpg" alt="Village children playing in Nubra Valley">
+                <figcaption>Village children playing in the beautiful Nubra Valley</figcaption>
+            </figure>
+
+            <h3>Camp Comforts (and Disconnects!)</h3>
+
+            <p>
+                By the time we reached our accommodations in Nubra Valley, it was already quite late. Thankfully, our
+                "tents" weren't exactly the roughing-it kind. These boasted comfortable beds, attached washrooms, and
+                all the blankets we could ask for. The only caveat? No mobile network and a post-11 pm electricity
+                curfew. Luckily, exhaustion from the day's adventure had us all surrendering to sleep by 10:30 anyway!
+            </p>
+
+            <hr class="article-divider">
+
+            <!-- DAY 3 -->
+            <h2>Day 3: Camels, Critters, and a Chillingly Beautiful Pangong</h2>
+
+            <!-- INLINE IMAGE — NUBRA LANDSCAPE -->
+            <figure class="article-image">
+                <img src="../media/blogs/ladakh/nubra_landscape.jpg" alt="Nubra Valley landscape">
+                <figcaption>The breathtaking landscape of Nubra Valley</figcaption>
+            </figure>
+
+            <p>
+                After a night amongst the dunes of Nubra Valley (yes, camels in Ladakh, who knew!), we set off on
+                another off-road odyssey. This time, our destination: the legendary Pangong Tso, or Pangong Lake. The
+                journey itself was an adventure – navigating the rough terrain alongside the Nubra River. We even
+                spotted a colony of Himalayan marmots basking in the sun – adorable little creatures that looked like
+                fluffy, dark-skinned rabbits.
+            </p>
+
+            <!-- INLINE IMAGE — MARMOT -->
+            <figure class="article-image">
+                <img src="../media/blogs/ladakh/brown_rabbit.jpg" alt="Himalayan marmot near Pangong Lake">
+                <figcaption>A curious Himalayan marmot spotted on the way to Pangong Lake</figcaption>
+            </figure>
+
+            <p>
+                Reaching Pangong at a staggering 14,000 feet was a whole new experience. The air was crisp, the wind
+                bitingly cold, and the lake itself – a vision in deep blue. Framed by the majestic brown mountains, it
+                felt like stepping into a postcard come to life. After a photo session that yielded approximately 300
+                stunning shots (guilty!), we moved to our campsite, nestled right beside the lake. The sight around the
+                lake added a touch of Bollywood nostalgia – numerous scooters, reminiscent of Rancho's ride in "3
+                Idiots".
+            </p>
+
+            <!-- INLINE IMAGE — PANGONG LANDSCAPE -->
+            <figure class="article-image">
+                <img src="../media/blogs/ladakh/pangong_landscape.jpg" alt="Pangong Lake landscape">
+                <figcaption>Pangong Lake — a vision in deep blue, framed by majestic brown mountains</figcaption>
+            </figure>
+
+            <p>
+                Pangong, for those curious, is a massive waterbody – a whopping 134 km long, with roughly a third
+                gracing the Indian side. As evening settled, the temperature dipped well below zero.
+            </p>
+
+            <h3>Pangong unplugged (Literally!)</h3>
+
+            <p>
+                Dinner was a simple affair – hot rotis, aloo-gobi and dal tadka with rice. I, however, opted for a hot
+                bowl of tomato soup, mainly because altitude-induced thirst had me feeling like a parched camel (minus
+                the majestic desert stroll). During it, we got a chance to interact with the locals. They shared
+                fascinating stories about life at Pangong. Apparently, temperatures here plummet to a bone-chilling -30
+                degrees in winter, forcing them to migrate to Leh for warmer months. A colleague of mine who visited
+                Pangong in mid-April even mentioned the lake being frozen then! That paints a vivid picture of how much
+                colder it gets here compared to Nubra Valley.
+            </p>
+
+            <p>
+                Unlike Nubra Valley, Pangong offered a complete digital detox. No mobile network signals reached this
+                remote place. But hey, who needs Instagram when you have a scene straight out of a National Geographic
+                documentary right in front of you? The upside? Electricity, though limited to 11 pm, ensured a warm
+                night's sleep (thanks to the trusty hot water in the mornings!).
+            </p>
+
+            <p>
+                Our cozy wooden camps provided some relief from the cold. While some in our group braved the altitude
+                with the help of medication, the sight of the beautiful lake, its beauty etched into our minds, surely
+                played a part in helping us conquer the night.
+            </p>
+
+            <hr class="article-divider">
+
+            <!-- DAY 4 -->
+            <h2>Day 4: From Pangong to Hanle: Where the Stars Shine Brighter (And the Wind Blows Stronger!</h2>
+
+            <!-- INLINE IMAGE — PANGONG 2 -->
+            <figure class="article-image">
+                <img src="../media/blogs/ladakh/pangong_2.jpg" alt="Pangong Lake panorama">
+                <figcaption>One last look at the stunning Pangong Lake before leaving</figcaption>
+            </figure>
+
+            <p>
+                Leaving the beauty of Pangong Lake behind, we set our sights on Hanle, a remote village known for its
+                pristine night skies and astronomical observatories. But getting there, as it turned out, was a journey
+                that would rival any Bollywood action sequence.
+            </p>
+
+            <p>
+                Our trusty tempo traveler, now a seasoned veteran of Ladakh's rugged terrain, hummed along the edge of
+                Pangong, giving us one last dazzling view of its turquoise waters. But soon, the road turned into a
+                bone-rattling rollercoaster, complete with potholes that could swallow a small yak. "Hold on tight,
+                folks," I joked, "we're about to enter the 'real' Ladakh!"
+            </p>
+
+            <p>
+                The landscape transformed into a barren expanse, filled with stark military camps – a reminder that we
+                were venturing close to the Line of Actual Control (LAC) with China. It was a sobering sight, but one
+                that filled us with a newfound appreciation for the brave soldiers who guard our borders. Our driver, a
+                resident of a nearby village, told us stories of the harsh winters there, with temperatures plummeting
+                to -30 to -40 degrees Celsius. Yet, these warriors remain steadfast, protecting our nation in
+                unimaginable conditions.
+            </p>
+
+            <p>
+                After a white-knuckle drive, we arrived at Rezang La, a mountain pass where a fierce battle had been
+                fought in 1962. A memorial stood as a poignant tribute to the soldiers who made the ultimate sacrifice.
+                The tour of the memorial was given by army officers, their stories of courage and camaraderie echoing
+                through the thin mountain air.
+            </p>
+
+            <p>
+                "Even at 16,000 feet," the army officer remarked with a grin, "we believe in serving hot samosas, not
+                just cold duty!" And indeed, the army-run café offered a welcome respite, the warm samosas and steaming
+                cups of chai a much-needed boost.
+            </p>
+
+            <!-- INLINE IMAGE — DOGS AT 16K -->
+            <figure class="article-image">
+                <img src="../media/blogs/ladakh/dogs_16k.jpg" alt="Dogs at 16,000 feet altitude">
+                <figcaption>Loyal companions at 16,000 feet near the Rezang La memorial</figcaption>
+            </figure>
+
+            <p>
+                Refueled and re-energised, we continued our journey, the landscape stretching into an endless tapestry
+                of white mountains and dust devils that danced across the road. It was a lonely, desolate beauty, a
+                testament to nature's raw power.
+            </p>
+
+            <p>
+                As evening approached, we reached Hanle, a cluster of buildings located in mid of the mountains. Our
+                first stop was the Hanle Monastery, located atop a hill. From its heights, we gazed upon a breathtaking
+                panorama – a vast plain crisscrossed by shimmering streams, framed by towering peaks.
+            </p>
+
+            <!-- INLINE IMAGE — HANLE -->
+            <figure class="article-image">
+                <img src="../media/blogs/ladakh/hanle.jpg" alt="Hanle Monastery and landscape">
+                <figcaption>The serene Hanle Monastery perched atop a hill, overlooking the vast plain</figcaption>
+            </figure>
+
+            <p>
+                Even though the monks were absent, the serenity of the monastery filled our souls. Descending back into
+                the village, we found our way to our homestay, a cozy place where a warm welcome and home-cooked meal
+                awaited us.
+            </p>
+
+            <p>
+                As night fell, the real magic of Hanle unfolded. With minimal light pollution, the sky became a canvas
+                for a million twinkling stars. The Milky Way stretched across the sky like a celestial river of light.
+                It was a moment of profound awe, a reminder of our place in the vast cosmos.
+            </p>
+
+            <p>
+                Exhausted but exhilarated, we drifted off to sleep, our dreams filled with visions of mountain passes,
+                shimmering lakes, and a sky ablaze with stars. Our Leh Ladakh adventure was far from over, but it was
+                already etched in our hearts as an unforgettable journey of a lifetime.
+            </p>
+
+            <hr class="article-divider">
+
+            <!-- DAY 5 -->
+            <h2>Day 5: Stargazing, Gamma Rays, and a Boiling Surprise in Freezing Ladakh</h2>
+
+            <!-- INLINE IMAGE — MACE BARC -->
+            <figure class="article-image">
+                <img src="../media/blogs/ladakh/mace_barc.jpg" alt="MACE telescope at Hanle">
+                <figcaption>The MACE telescope facility at Hanle — the highest of its kind in the world</figcaption>
+            </figure>
+
+            <p>
+                After a well-deserved sleep-in, we woke up feeling like we could conquer the world (or at least a few
+                more mountain passes!). A hearty breakfast of hot aloo parathas and bread with jam fueled our day of
+                cosmic exploration.
+            </p>
+
+            <p>
+                Our first stop: the Indian Astronomical Observatory's telescope, located on a hilltop like a giant. The
+                engineer on duty gave us a tour of the facility.
+            </p>
+
+            <p>
+                "We're basically star detectives here," he explained, "unraveling the mysteries of the universe from
+                this remote outpost. And believe me, winters here are so cold, even the aliens wouldn't dare to visit!"
+            </p>
+
+            <p>
+                He showed us how the telescope, remotely controlled from Bangalore, could capture stunning images of
+                distant galaxies and nebulae. It was enough to make any space nerd (like yours truly) giddy with
+                excitement.
+            </p>
+
+            <p>
+                Next, we descended the mountain to the MACE (Major Atmospheric Cerenkov Experiment) telescope, the
+                highest of its kind in the world. Thanks to a relative who helped design this marvel, we got an
+                exclusive behind-the-scenes tour.
+            </p>
+
+            <p>
+                "Imagine this telescope as a giant gamma-ray detective," the operator explained, "sniffing out the
+                high-energy particles emitted by black holes and other cosmic phenomena."
+            </p>
+
+            <p>
+                For my brother and me, it was like stepping into a real-life sci-fi movie. We geeked out over the
+                control room, the intricate components, and the mind-boggling science behind it all. We spent some 2
+                hours exploring the facility there.
+            </p>
+
+            <p>
+                After leaving Hanle, we followed the Indus River, its turquoise waters snaking through the barren
+                landscape like a lifeline. The road was surprisingly smooth, a welcome change from the previous day's
+                bone-jarring adventure.
+            </p>
+
+            <p>
+                Then came an unexpected surprise: a natural hot spring bubbling away in the middle of nowhere. The air
+                temperature was a frigid -3 degrees Celsius, but the water was practically boiling!
+            </p>
+
+            <p>
+                "This must be Mother Nature's way of saying, 'Hey, take a break and enjoy a hot tub!'" I joked, as we
+                cautiously dipped our toes into the steaming water. The sulfurous smell added a touch of rotten-egg
+                charm to the experience, but hey, who were we to argue with nature's spa treatment?
+            </p>
+
+            <p>
+                After a quick lunch at a nearby dhaba, we continued our journey to Leh, arriving in the late afternoon.
+                We couldn't resist a brief stop at the iconic Rancho's School, made famous by the Bollywood movie "3
+                Idiots."
+            </p>
+
+            <p>
+                The place was a charming mix of nostalgia and tourist kitsch, complete with a vintage cafe and quirky "3
+                Idiots" memorabilia. A few silly poses and cheesy quotes later, we were back on the road, eager to
+                explore Leh's bustling market.
+            </p>
+
+            <p>
+                As the sun dipped below the horizon, we strolled through the market, soaking in the vibrant atmosphere
+                and indulging in a bit of souvenir shopping. By the time we returned to our hotel, we were exhausted but
+                happy, our heads filled with stars, gamma rays, and memories of an extraordinary day in Ladakh.
+            </p>
+
+            <!-- STAY TUNED CALLOUT -->
+            <div class="callout callout-green">
+                <span class="callout-icon">📌</span>
+                <p>
+                    <strong>Stay tuned</strong> for Part 2 of my Leh Ladakh - Srinagar escapade, where we trade starry
+                    skies for the bustling streets of Srinagar! We'll be navigating the infamous Zoji La Pass, exploring
+                    the stunning landscapes of Pahalgam and Sonmarg, and immersing ourselves in the rich culture of
+                    Kashmir. Don't miss the next chapter of our bumpy (but beautiful) adventure!
+                </p>
+            </div>
+
+            <!-- TAGS -->
+            <div class="article-tags">
+                <span class="article-tag">Travel</span>
+                <span class="article-tag">Ladakh</span>
+                <span class="article-tag">Pangong Lake</span>
+                <span class="article-tag">Khardung La</span>
+                <span class="article-tag">Hanle</span>
+                <span class="article-tag">Nubra Valley</span>
+                <span class="article-tag">Road Trip</span>
+                <span class="article-tag">India</span>
+            </div>
+
+        </div>
+    </article>
+
+    <!-- BACK NAVIGATION -->
+    <div class="bottom-nav">
+        <a href="./index.html" class="back-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m15 18-6-6 6-6" />
+            </svg>
+            Back to all posts
+        </a>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="blog-footer">
+        <p>&copy; <span id="current-year"></span> Anuj Mehta. All rights reserved.</p>
+        <div class="blog-footer-links">
+            <a href="https://github.com/mehtaanuj95" target="_blank">GitHub</a>
+            <a href="https://www.linkedin.com/in/anujbhaimehta" target="_blank">LinkedIn</a>
+            <a href="mailto:mehta.anuj2309@gmail.com">Email</a>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script>
+        // Copyright year
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        // Reading progress bar
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = (scrollTop / docHeight) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building AI Agents: A Practical Guide | Blog</title>
+    <meta name="description"
+        content="A deep dive into the architecture behind modern AI agents — from tool-use patterns and reasoning loops to memory, reflection, and real-world deployment strategies.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        /* --- CSS VARIABLES --- */
+        :root {
+            --bg-body: #fafafa;
+            --bg-white: #ffffff;
+            --bg-neutral-100: #f5f5f5;
+            --bg-neutral-900: #171717;
+            --text-900: #171717;
+            --text-700: #404040;
+            --text-600: #525252;
+            --text-500: #737373;
+            --text-400: #a3a3a3;
+            --text-300: #d4d4d4;
+            --border-100: #f5f5f5;
+            --border-200: #e5e5e5;
+            --border-300: #d4d4d4;
+            --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        }
+
+        /* --- RESET --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-900);
+            font-family: var(--font-sans);
+            line-height: 1.8;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        ::selection {
+            background-color: #dbeafe;
+            color: #1e3a5f;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* --- TOP NAV --- */
+        .top-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(250, 250, 250, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-200);
+            padding: 0 1.5rem;
+        }
+
+        .top-nav-inner {
+            max-width: 720px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 56px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-500);
+            transition: color 0.2s ease;
+        }
+
+        .back-link:hover {
+            color: var(--text-900);
+        }
+
+        .nav-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-400);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 50%;
+        }
+
+        /* --- HERO --- */
+        .hero {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 21/9;
+            overflow: hidden;
+            background: var(--bg-neutral-900);
+        }
+
+        .hero img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.7;
+            transition: transform 0.6s ease;
+        }
+
+        .hero:hover img {
+            transform: scale(1.02);
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom,
+                    rgba(23, 23, 23, 0.1) 0%,
+                    rgba(23, 23, 23, 0.5) 50%,
+                    rgba(23, 23, 23, 0.85) 100%);
+        }
+
+        .hero-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 2rem 1.5rem;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 768px) {
+            .hero-content {
+                padding: 3rem 1.5rem;
+            }
+        }
+
+        .hero-tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .hero h1 {
+            color: #fff;
+            font-size: 1.75rem;
+            font-weight: 800;
+            line-height: 1.2;
+            letter-spacing: -0.025em;
+            margin-bottom: 0.75rem;
+        }
+
+        @media (min-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        .hero-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .hero-meta-dot {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* --- ARTICLE --- */
+        .article-wrapper {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem 4rem;
+        }
+
+        @media (min-width: 768px) {
+            .article-wrapper {
+                padding: 4rem 1.5rem 6rem;
+            }
+        }
+
+        .article-body h2 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-900);
+            margin: 3rem 0 1rem;
+            letter-spacing: -0.025em;
+            line-height: 1.3;
+        }
+
+        .article-body h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-900);
+            margin: 2.5rem 0 0.75rem;
+            letter-spacing: -0.015em;
+        }
+
+        .article-body p {
+            color: var(--text-700);
+            font-size: 1.05rem;
+            line-height: 1.85;
+            margin-bottom: 1.5rem;
+        }
+
+        /* --- LEAD PARAGRAPH --- */
+        .lead {
+            font-size: 1.15rem;
+            color: var(--text-600);
+            border-left: 3px solid var(--bg-neutral-900);
+            padding-left: 1.25rem;
+            margin-bottom: 2.5rem;
+            line-height: 1.8;
+        }
+
+        /* --- BLOCKQUOTE --- */
+        .article-body blockquote {
+            margin: 2.5rem 0;
+            padding: 2rem 2rem 2rem 1.75rem;
+            background: linear-gradient(135deg, var(--bg-neutral-100) 0%, var(--bg-white) 100%);
+            border-left: 4px solid var(--bg-neutral-900);
+            border-radius: 0 1rem 1rem 0;
+            position: relative;
+        }
+
+        .article-body blockquote::before {
+            content: '"';
+            position: absolute;
+            top: 0.25rem;
+            left: 0.75rem;
+            font-size: 4rem;
+            font-family: Georgia, serif;
+            color: var(--text-300);
+            line-height: 1;
+        }
+
+        .article-body blockquote p {
+            color: var(--text-700);
+            font-size: 1.1rem;
+            font-style: italic;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            padding-top: 1rem;
+        }
+
+        .article-body blockquote cite {
+            display: block;
+            font-style: normal;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-500);
+            margin-top: 0.5rem;
+        }
+
+        /* --- INLINE IMAGE --- */
+        .article-image {
+            margin: 2.5rem 0;
+            border-radius: 1rem;
+            overflow: hidden;
+            border: 1px solid var(--border-200);
+            background: var(--bg-white);
+        }
+
+        .article-image img {
+            width: 100%;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+
+        .article-image:hover img {
+            transform: scale(1.01);
+        }
+
+        .article-image figcaption {
+            padding: 0.75rem 1.25rem;
+            font-size: 0.8rem;
+            color: var(--text-500);
+            text-align: center;
+            border-top: 1px solid var(--border-100);
+            font-weight: 500;
+        }
+
+        /* --- CODE BLOCK --- */
+        .code-block {
+            margin: 2rem 0;
+            background: var(--bg-neutral-900);
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .code-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1.25rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .code-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .code-dots span {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .code-dots span:nth-child(1) {
+            background: #ff5f56;
+        }
+
+        .code-dots span:nth-child(2) {
+            background: #ffbd2e;
+        }
+
+        .code-dots span:nth-child(3) {
+            background: #27c93f;
+        }
+
+        .code-lang {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .code-block pre {
+            padding: 1.25rem 1.5rem;
+            overflow-x: auto;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            line-height: 1.7;
+            color: #e4e4e7;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .code-block .kw {
+            color: #c084fc;
+        }
+
+        .code-block .fn {
+            color: #67e8f9;
+        }
+
+        .code-block .str {
+            color: #86efac;
+        }
+
+        .code-block .cm {
+            color: #6b7280;
+            font-style: italic;
+        }
+
+        .code-block .num {
+            color: #fbbf24;
+        }
+
+        .code-block .op {
+            color: #f87171;
+        }
+
+        /* --- LISTS --- */
+        .article-body ul,
+        .article-body ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-700);
+        }
+
+        .article-body li {
+            font-size: 1.05rem;
+            line-height: 1.85;
+            margin-bottom: 0.5rem;
+            padding-left: 0.25rem;
+        }
+
+        .article-body li strong {
+            color: var(--text-900);
+        }
+
+        /* --- CALLOUT BOX --- */
+        .callout {
+            margin: 2.5rem 0;
+            padding: 1.5rem 1.75rem;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 1rem;
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .callout-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            margin-top: 0.1rem;
+        }
+
+        .callout p {
+            font-size: 0.95rem;
+            color: #166534;
+            line-height: 1.7;
+            margin-bottom: 0;
+        }
+
+        .callout strong {
+            color: #14532d;
+        }
+
+        /* --- DIVIDER --- */
+        .article-divider {
+            border: none;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--border-200), transparent);
+            margin: 3rem 0;
+        }
+
+        /* --- TAGS --- */
+        .article-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 2.5rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-200);
+        }
+
+        .article-tag {
+            padding: 0.35rem 0.85rem;
+            background: var(--bg-white);
+            border: 1px solid var(--border-200);
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-600);
+            transition: all 0.2s ease;
+        }
+
+        .article-tag:hover {
+            border-color: var(--text-900);
+            color: var(--text-900);
+        }
+
+        /* --- BOTTOM NAV --- */
+        .bottom-nav {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 1.5rem 4rem;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-neutral-900);
+            color: #fff;
+            border-radius: 0.75rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .back-btn:hover {
+            background: #262626;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        /* --- FOOTER --- */
+        .blog-footer {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 3rem;
+            border-top: 1px solid var(--border-200);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-500);
+        }
+
+        @media (min-width: 640px) {
+            .blog-footer {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+        }
+
+        .blog-footer-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .blog-footer-links a {
+            transition: color 0.2s ease;
+        }
+
+        .blog-footer-links a:hover {
+            color: var(--text-900);
+        }
+
+        /* --- READING PROGRESS BAR --- */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #171717 0%, #525252 100%);
+            z-index: 200;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        /* --- SMOOTH REVEAL ANIMATION --- */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .article-body>* {
+            animation: fadeInUp 0.5s ease both;
+        }
+
+        .article-body>*:nth-child(1) {
+            animation-delay: 0.05s;
+        }
+
+        .article-body>*:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .article-body>*:nth-child(3) {
+            animation-delay: 0.15s;
+        }
+
+        .article-body>*:nth-child(4) {
+            animation-delay: 0.2s;
+        }
+
+        .article-body>*:nth-child(5) {
+            animation-delay: 0.25s;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- READING PROGRESS -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- TOP NAVIGATION -->
+    <nav class="top-nav">
+        <div class="top-nav-inner">
+            <a href="./index.html" class="back-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m15 18-6-6 6-6" />
+                </svg>
+                All Posts
+            </a>
+            <span class="nav-title">Building AI Agents</span>
+        </div>
+    </nav>
+
+    <!-- HERO BANNER -->
+    <div class="hero">
+        <img src="../media/deep-research-seq.png" alt="AI Agents architecture diagram">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <span class="hero-tag">AI Engineering</span>
+            <h1>Building AI Agents: A Practical Guide to Autonomous Reasoning Systems</h1>
+            <div class="hero-meta">
+                <span>February 20, 2026</span>
+                <span class="hero-meta-dot">&bull;</span>
+                <span>12 min read</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ARTICLE BODY -->
+    <article class="article-wrapper">
+        <div class="article-body">
+
+            <p class="lead">
+                AI agents are reshaping how we think about software — from simple request-response systems to autonomous
+                entities that reason, plan, and take action. In this post, we'll walk through the core architecture
+                patterns that make modern AI agents work.
+            </p>
+
+            <!-- SECTION 1 -->
+            <h2>What Makes an AI Agent?</h2>
+
+            <p>
+                At its core, an AI agent is a system that perceives its environment, reasons about what to do, and takes
+                actions to achieve a goal. Unlike a traditional chatbot that generates a single response, an agent
+                operates in a <strong>loop</strong> — observing results, reflecting on progress, and deciding what step
+                to take next.
+            </p>
+
+            <p>
+                The key shift is moving from <em>generation</em> to <em>orchestration</em>. Instead of asking an LLM to
+                produce a final answer in one shot, we give it tools, memory, and a planning framework, then let it
+                iterate toward a solution.
+            </p>
+
+            <blockquote>
+                <p>The best agents aren't the ones with the most powerful models — they're the ones with the
+                    best-designed loops. A well-structured reasoning cycle can outperform a much larger model operating
+                    in a single pass.</p>
+                <cite>— Inspired by research on chain-of-thought and ReAct agents</cite>
+            </blockquote>
+
+            <!-- SECTION 2 -->
+            <h2>The Core Agent Loop</h2>
+
+            <p>
+                Most modern agent architectures follow a variant of the <strong>Observe → Think → Act</strong> loop
+                (sometimes called the ReAct pattern). Here's how it breaks down:
+            </p>
+
+            <ol>
+                <li><strong>Observe</strong> — The agent receives input from the user or gathers information from tools
+                    (APIs, search engines, databases).</li>
+                <li><strong>Think</strong> — The LLM reasons about the current state, evaluates what it knows, and
+                    decides on the next step.</li>
+                <li><strong>Act</strong> — The agent executes a tool call, writes code, fetches data, or returns a
+                    response to the user.</li>
+                <li><strong>Reflect</strong> — After acting, the agent evaluates the result. Did it succeed? Should it
+                    retry? Is more information needed?</li>
+            </ol>
+
+            <p>
+                This loop repeats until the agent determines it has achieved its goal or has exhausted its available
+                steps. The magic lies in the quality of the <em>reflection</em> step — the ability to self-correct is
+                what separates a useful agent from a hallucinating one.
+            </p>
+
+            <!-- INLINE IMAGE -->
+            <figure class="article-image">
+                <img src="../media/static-dra.png"
+                    alt="Diagram showing the hierarchical tree-based approach for deep research agents">
+                <figcaption>Figure 1 — A hierarchical tree-based architecture for configurable deep research agents,
+                    showing the branching and depth parameters.</figcaption>
+            </figure>
+
+            <!-- SECTION 3 -->
+            <h2>Tool Use: Giving Agents Hands</h2>
+
+            <p>
+                A language model on its own can only generate text. To make it useful in the real world, we give it
+                access to <strong>tools</strong> — functions it can call to interact with external systems. Common tools
+                include:
+            </p>
+
+            <ul>
+                <li><strong>Web Search</strong> — Retrieve up-to-date information from the internet</li>
+                <li><strong>Code Execution</strong> — Write and run Python code in a sandbox</li>
+                <li><strong>Database Queries</strong> — Read from or write to SQL/NoSQL databases</li>
+                <li><strong>API Calls</strong> — Interact with third-party services (Slack, GitHub, etc.)</li>
+                <li><strong>File Operations</strong> — Read, write, and manipulate files on disk</li>
+            </ul>
+
+            <p>
+                The key insight is that tools should be <em>well-documented and narrowly scoped</em>. An agent performs
+                best when each tool has a clear description, defined inputs and outputs, and handles errors gracefully.
+                Think of tools as the agent's "hands" — they're only useful if the brain knows exactly how to use them.
+            </p>
+
+            <!-- CODE BLOCK -->
+            <div class="code-block">
+                <div class="code-header">
+                    <div class="code-dots">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <span class="code-lang">Python</span>
+                </div>
+                <pre><code><span class="cm"># Define a simple tool for the agent</span>
+<span class="kw">from</span> langchain.tools <span class="kw">import</span> tool
+
+<span class="kw">@tool</span>
+<span class="kw">def</span> <span class="fn">search_documents</span>(query: <span class="fn">str</span>) -> <span class="fn">str</span>:
+    <span class="str">"""Search the knowledge base for relevant documents.
+    
+    Args:
+        query: The search query string
+    
+    Returns:
+        A string containing relevant document excerpts
+    """</span>
+    results = vector_store.<span class="fn">similarity_search</span>(query, k=<span class="num">5</span>)
+    <span class="kw">return</span> <span class="str">"\n"</span>.<span class="fn">join</span>([doc.page_content <span class="kw">for</span> doc <span class="kw">in</span> results])
+
+<span class="cm"># Register the tool with the agent</span>
+agent = <span class="fn">create_react_agent</span>(
+    llm=llm,
+    tools=[search_documents],
+    prompt=agent_prompt
+)</code></pre>
+            </div>
+
+            <hr class="article-divider">
+
+            <!-- SECTION 4 -->
+            <h2>Memory: Short-Term and Long-Term</h2>
+
+            <p>
+                One of the biggest challenges in building useful agents is <strong>memory management</strong>. A
+                conversation with 50 back-and-forth messages quickly exceeds most context windows. Modern agents address
+                this with two types of memory:
+            </p>
+
+            <h3>Short-Term Memory (Working Memory)</h3>
+            <p>
+                This is the immediate conversational context — the messages in the current session. The agent uses this
+                to maintain coherence within a task. Smart implementations use <em>summarization</em> to compress older
+                messages while preserving key information.
+            </p>
+
+            <h3>Long-Term Memory (Persistent Memory)</h3>
+            <p>
+                This is information that persists across sessions — user preferences, past decisions, learned patterns.
+                Vector databases like Pinecone, Weaviate, or Chroma are commonly used to store and retrieve long-term
+                memories via semantic search.
+            </p>
+
+            <!-- CALLOUT BOX -->
+            <div class="callout">
+                <span class="callout-icon">💡</span>
+                <p>
+                    <strong>Pro Tip:</strong> When designing memory for your agent, think about what information will be
+                    valuable <em>across sessions</em>. User preferences, project context, and domain-specific knowledge
+                    are excellent candidates for long-term storage. Raw conversation logs are not.
+                </p>
+            </div>
+
+            <!-- SECTION 5 -->
+            <h2>Multi-Agent Orchestration</h2>
+
+            <p>
+                As tasks grow more complex, a single agent often isn't enough. <strong>Multi-agent systems</strong>
+                split work across specialized agents that collaborate to solve a problem. Common patterns include:
+            </p>
+
+            <ul>
+                <li><strong>Supervisor Pattern</strong> — A "manager" agent delegates tasks to specialized workers and
+                    aggregates their results</li>
+                <li><strong>Pipeline Pattern</strong> — Agents are chained sequentially, each processing the output of
+                    the previous one</li>
+                <li><strong>Debate Pattern</strong> — Multiple agents argue different positions and a judge agent
+                    synthesizes the final answer</li>
+            </ul>
+
+            <p>
+                Frameworks like <strong>LangGraph</strong> make multi-agent orchestration more tractable by representing
+                agent workflows as directed graphs. Each node is an agent or tool, and edges define the flow of control
+                — including conditional branching based on agent outputs.
+            </p>
+
+            <!-- SECOND INLINE IMAGE -->
+            <figure class="article-image">
+                <img src="../media/langpost-img.png" alt="LangPost AI agent workflow diagram">
+                <figcaption>Figure 2 — An example multi-agent workflow using LangGraph, showing how agents are connected
+                    through conditional edges and shared state.</figcaption>
+            </figure>
+
+            <hr class="article-divider">
+
+            <!-- SECTION 6 -->
+            <h2>Lessons From Production</h2>
+
+            <p>
+                After deploying several agentic systems in production, here are the patterns that keep coming up:
+            </p>
+
+            <ol>
+                <li><strong>Start simple.</strong> Begin with a single-agent loop and only add complexity when you hit a
+                    real limitation. Most problems don't need multi-agent orchestration.</li>
+                <li><strong>Invest in evaluation.</strong> You can't improve what you can't measure. Build robust evals
+                    that test your agent on diverse scenarios before shipping.</li>
+                <li><strong>Design for failure.</strong> Agents will make mistakes. Build guardrails — output
+                    validation, human-in-the-loop checkpoints, and retry logic with exponential backoff.</li>
+                <li><strong>Keep tools atomic.</strong> Each tool should do one thing well. Composite tools that try to
+                    do too much confuse the agent's planner.</li>
+                <li><strong>Log everything.</strong> Trace every step of the agent's reasoning. When something goes
+                    wrong (and it will), you need full observability to debug it.</li>
+            </ol>
+
+            <blockquote>
+                <p>In practice, 80% of agent failures come from poor tool descriptions and under-specified prompts — not
+                    from model limitations. The bottleneck is almost always in the system design, not the AI.</p>
+                <cite>— Lessons from building production agentic workflows</cite>
+            </blockquote>
+
+            <!-- SECTION 7 -->
+            <h2>What's Next?</h2>
+
+            <p>
+                The field is moving incredibly fast. Self-evolving agents that improve their own prompts, agents that
+                generate and test their own tools, and systems that learn from human feedback in real-time are all
+                active areas of research.
+            </p>
+
+            <p>
+                If you're just getting started, I'd recommend picking a concrete use case — a research assistant, a code
+                reviewer, a data analyst — and building a minimal agent that handles it end-to-end. You'll learn more
+                from one working prototype than from reading a dozen papers.
+            </p>
+
+            <p>
+                The future of software is agentic. The question isn't <em>whether</em> AI agents will transform how we
+                build software, but <em>how fast</em>.
+            </p>
+
+            <!-- TAGS -->
+            <div class="article-tags">
+                <span class="article-tag">AI Agents</span>
+                <span class="article-tag">LangChain</span>
+                <span class="article-tag">LangGraph</span>
+                <span class="article-tag">RAG</span>
+                <span class="article-tag">Prompt Engineering</span>
+                <span class="article-tag">Multi-Agent Systems</span>
+                <span class="article-tag">Python</span>
+            </div>
+
+        </div>
+    </article>
+
+    <!-- BACK NAVIGATION -->
+    <div class="bottom-nav">
+        <a href="./index.html" class="back-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m15 18-6-6 6-6" />
+            </svg>
+            Back to all posts
+        </a>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="blog-footer">
+        <p>&copy; <span id="current-year"></span> Anuj Mehta. All rights reserved.</p>
+        <div class="blog-footer-links">
+            <a href="https://github.com/mehtaanuj95" target="_blank">GitHub</a>
+            <a href="https://www.linkedin.com/in/anujbhaimehta" target="_blank">LinkedIn</a>
+            <a href="mailto:mehta.anuj2309@gmail.com">Email</a>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script>
+        // Copyright year
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        // Reading progress bar
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = (scrollTop / docHeight) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        });
+    </script>
+
+</body>
+
+</html>

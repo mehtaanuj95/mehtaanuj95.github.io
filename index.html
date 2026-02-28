@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anuj Mehta</title>
+  <style>
+    /* --- CSS VARIABLES (Color Palette) --- */
+    :root {
+      --bg-body: #fafafa;
+      --bg-white: #ffffff;
+      --bg-neutral-100: #f5f5f5;
+      --bg-neutral-900: #171717;
+
+      --text-900: #171717;
+      --text-700: #404040;
+      --text-600: #525252;
+      --text-500: #737373;
+      --text-400: #a3a3a3;
+      --text-300: #d4d4d4;
+
+      --border-100: #f5f5f5;
+      --border-200: #e5e5e5;
+      --border-300: #d4d4d4;
+
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+
+    /* --- RESET & BASE STYLES --- */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-body);
+      color: var(--text-900);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    ::selection {
+      background-color: #e5e5e5;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+      transition: color 0.2s ease;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      line-height: 1.2;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .container {
+        padding: 6rem 1.5rem;
+      }
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      color: var(--text-900);
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-200);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .mb-20 {
+      margin-bottom: 5rem;
+    }
+
+    .text-mono {
+      font-family: var(--font-mono);
+    }
+
+    .flex {
+      display: flex;
+    }
+
+    .items-center {
+      align-items: center;
+    }
+
+    .gap-2 {
+      gap: 0.5rem;
+    }
+
+    .gap-4 {
+      gap: 1rem;
+    }
+
+    /* --- HEADER SECTION --- */
+    .header-content {
+      display: flex;
+      flex-direction: column-reverse;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    @media (min-width: 640px) {
+      .header-content {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+      }
+    }
+
+    .header-title {
+      font-size: 2.25rem;
+      margin-bottom: 1rem;
+      font-weight: 800;
+    }
+
+    @media (min-width: 640px) {
+      .header-title {
+        font-size: 3rem;
+      }
+    }
+
+    .header-role {
+      font-size: 1.25rem;
+      color: var(--text-600);
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+    }
+
+    .header-desc {
+      color: var(--text-600);
+      max-width: 36rem;
+    }
+
+    .profile-photo {
+      width: 6rem;
+      height: 6rem;
+      background-color: var(--border-200);
+      border-radius: 50%;
+      border: 4px solid var(--bg-white);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-400);
+      font-size: 0.875rem;
+      font-weight: 500;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    @media (min-width: 640px) {
+      .profile-photo {
+        width: 12rem;
+        height: 12rem;
+      }
+    }
+
+    .profile-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background-color: var(--bg-neutral-900);
+      color: var(--bg-white);
+    }
+
+    .btn-primary:hover {
+      background-color: #262626;
+    }
+
+    .btn-secondary {
+      background-color: var(--bg-white);
+      color: var(--text-900);
+      border: 1px solid var(--border-200);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--bg-neutral-100);
+    }
+
+    /* --- DROPDOWN COMPONENT --- */
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      margin-top: 0.5rem;
+      background-color: var(--bg-white);
+      border: 1px solid var(--border-200);
+      border-radius: 0.75rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      min-width: 200px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      padding: 0.5rem;
+    }
+
+    .dropdown:hover .dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      color: var(--text-700);
+      font-size: 0.875rem;
+      font-weight: 500;
+      border-radius: 0.5rem;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .dropdown-item:hover {
+      background-color: var(--bg-neutral-100);
+      color: var(--text-900);
+    }
+
+    .dropdown-item svg {
+      color: var(--text-500);
+      transition: color 0.2s ease;
+    }
+
+    .dropdown-item:hover svg {
+      color: var(--text-900);
+    }
+
+    /* --- EXPERIENCE TIMELINE --- */
+    .timeline {
+      position: relative;
+      border-left: 1px solid var(--border-200);
+      margin-left: 1rem;
+      padding-bottom: 1rem;
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-left: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    @media (min-width: 768px) {
+      .timeline-item {
+        padding-left: 3rem;
+      }
+    }
+
+    .timeline-logo {
+      position: absolute;
+      left: -1.5rem;
+      top: 0;
+      width: 3rem;
+      height: 3rem;
+      background-color: var(--bg-white);
+      border: 1px solid var(--border-200);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      font-weight: 700;
+      font-size: 1.125rem;
+      color: var(--text-400);
+      transition: all 0.2s ease;
+    }
+
+    .timeline-item:hover .timeline-logo {
+      border-color: var(--border-300);
+      color: var(--text-600);
+    }
+
+    .timeline-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 0.4rem;
+    }
+
+    .job-header {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 0.75rem;
+      gap: 0.25rem;
+    }
+
+    @media (min-width: 640px) {
+      .job-header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: baseline;
+      }
+    }
+
+    .job-title {
+      font-size: 1.125rem;
+      color: var(--text-900);
+    }
+
+    .job-company {
+      color: var(--text-400);
+      font-weight: 400;
+    }
+
+    .job-date {
+      font-size: 0.875rem;
+      color: var(--text-500);
+      background-color: var(--bg-neutral-100);
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.375rem;
+      display: inline-block;
+      width: fit-content;
+    }
+
+    .job-desc {
+      color: var(--text-600);
+      max-width: 42rem;
+    }
+
+    /* --- CARDS (Projects & Achievements) --- */
+    .card-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .card {
+      padding: 1.5rem;
+      border-radius: 1rem;
+      border: 1px solid var(--border-200);
+      background-color: var(--bg-white);
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card:hover {
+      border-color: var(--border-300);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+
+    .card-title {
+      font-size: 1.125rem;
+      transition: color 0.2s ease;
+    }
+
+    .card:hover .card-title {
+      color: var(--text-600);
+    }
+
+    .card-desc {
+      color: var(--text-600);
+      font-size: 0.875rem;
+      margin-bottom: 1.5rem;
+      flex-grow: 1;
+    }
+
+    .icon-links {
+      display: flex;
+      gap: 0.5rem;
+      color: var(--text-400);
+    }
+
+    .icon-links a:hover {
+      color: var(--text-900);
+    }
+
+    .tech-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: auto;
+    }
+
+    .tech-badge {
+      padding: 0.25rem 0.5rem;
+      background-color: var(--bg-body);
+      border: 1px solid var(--border-100);
+      color: var(--text-600);
+      font-size: 0.75rem;
+      border-radius: 0.375rem;
+    }
+
+    /* --- PROJECT CARDS --- */
+    .project-card {
+      gap: 1.25rem;
+    }
+
+    @media (min-width: 640px) {
+      .project-card {
+        flex-direction: row;
+        gap: 1.5rem;
+      }
+    }
+
+    .project-image-placeholder {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background-color: var(--bg-body);
+      border: 1px solid var(--border-100);
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-300);
+      flex-shrink: 0;
+      transition: all 0.2s ease;
+      overflow: hidden;
+    }
+
+    @media (min-width: 640px) {
+      .project-image-placeholder {
+        width: 160px;
+        aspect-ratio: 4/3;
+      }
+    }
+
+    .card:hover .project-image-placeholder {
+      background-color: var(--bg-neutral-100);
+      color: var(--text-400);
+    }
+
+    .project-image-placeholder img {
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
+    }
+
+    .project-content {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    /* --- ACHIEVEMENTS --- */
+    .award-item {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      transition: all 0.2s ease;
+    }
+
+    @media (min-width: 640px) {
+      .award-item {
+        flex-direction: row;
+        gap: 1.5rem;
+      }
+    }
+
+    .award-image-placeholder {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background-color: var(--bg-body);
+      border: 1px solid var(--border-100);
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-300);
+      flex-shrink: 0;
+      transition: all 0.2s ease;
+      overflow: hidden;
+    }
+
+    @media (min-width: 640px) {
+      .award-image-placeholder {
+        width: 160px;
+        aspect-ratio: 4/3;
+      }
+    }
+
+    .award-item:hover .award-image-placeholder {
+      background-color: var(--bg-neutral-100);
+      color: var(--text-400);
+    }
+
+    .award-image-placeholder img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .award-content {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      justify-content: center;
+    }
+
+    .ach-org {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-500);
+      margin-bottom: 0.75rem;
+    }
+
+    .ach-desc {
+      font-size: 0.875rem;
+      color: var(--text-600);
+    }
+
+    /* --- BLOG, PUBLICATIONS, TALKS --- */
+    .list-header {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-200);
+    }
+
+    @media (min-width: 640px) {
+      .list-header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: baseline;
+      }
+    }
+
+    .list-header h3 {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border: none;
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .list-link {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-500);
+    }
+
+    .list-link:hover {
+      color: var(--text-900);
+    }
+
+    .list-item {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 1.5rem;
+      gap: 0.25rem;
+    }
+
+    @media (min-width: 640px) {
+      .list-item {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: baseline;
+      }
+    }
+
+    .list-title {
+      font-size: 1.125rem;
+      font-weight: 700;
+      transition: color 0.2s ease;
+    }
+
+    .list-item:hover .list-title {
+      color: var(--text-600);
+    }
+
+    .list-meta {
+      display: flex;
+      gap: 0.75rem;
+      font-size: 0.875rem;
+      color: var(--text-500);
+      flex-shrink: 0;
+    }
+
+    .meta-dot {
+      display: none;
+    }
+
+    @media (min-width: 640px) {
+      .meta-dot {
+        display: inline;
+        color: var(--text-300);
+      }
+    }
+
+    /* --- YOUTUBE --- */
+    .playlist-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .playlist-landscape-card {
+      display: flex;
+      flex-direction: column;
+      padding: 1rem;
+      gap: 1rem;
+      background-color: var(--bg-white);
+      border: 1px solid var(--border-200);
+      border-radius: 1rem;
+      transition: all 0.2s ease;
+    }
+
+    @media (min-width: 640px) {
+      .playlist-landscape-card {
+        flex-direction: row;
+        align-items: center;
+        padding: 1.25rem;
+        gap: 1.5rem;
+      }
+    }
+
+    .playlist-landscape-card:hover {
+      border-color: var(--border-300);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .playlist-landscape-image {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background-color: var(--bg-body);
+      border: 1px solid var(--border-100);
+      border-radius: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-300);
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .playlist-landscape-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: inherit;
+    }
+
+    @media (min-width: 640px) {
+      .playlist-landscape-image {
+        width: 240px;
+      }
+    }
+
+    .playlist-landscape-card:hover .playlist-landscape-image {
+      background-color: var(--bg-neutral-100);
+      color: var(--text-400);
+    }
+
+    .playlist-title {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--text-900);
+      transition: color 0.2s ease;
+      margin-bottom: 0.25rem;
+    }
+
+    .playlist-landscape-card:hover .playlist-title {
+      color: var(--text-600);
+    }
+
+    .playlist-desc {
+      font-size: 0.875rem;
+      color: var(--text-600);
+      line-height: 1.6;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 640px) {
+      .grid-2 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .video-card {
+      display: block;
+      padding: 1rem;
+      border: 1px solid var(--border-200);
+      border-radius: 1rem;
+      background-color: var(--bg-white);
+      transition: all 0.2s ease;
+    }
+
+    .video-card:hover {
+      border-color: var(--border-300);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .video-placeholder {
+      aspect-ratio: 16/9;
+      background-color: var(--bg-body);
+      border: 1px solid var(--border-100);
+      border-radius: 0.75rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-300);
+      transition: all 0.2s ease;
+    }
+
+    .video-placeholder img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: inherit;
+    }
+
+    .video-card:hover .video-placeholder {
+      background-color: var(--bg-neutral-100);
+      color: var(--text-400);
+    }
+
+    .video-title {
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      transition: color 0.2s ease;
+    }
+
+    .video-card:hover .video-title {
+      color: var(--text-600);
+    }
+
+    /* --- LANDSCAPE PLACEHOLDER --- */
+    .landscape-placeholder {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background-color: var(--bg-white);
+      border: 1px var(--border-200);
+      border-radius: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-400);
+      transition: all 0.2s ease;
+      overflow: hidden;
+    }
+
+    @media (min-width: 640px) {
+      .landscape-placeholder {
+        aspect-ratio: 21/9;
+      }
+    }
+
+    .landscape-placeholder:hover {
+      background-color: var(--bg-neutral-100);
+      border-color: var(--border-300);
+      color: var(--text-500);
+    }
+
+    .landscape-placeholder img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* --- SKILLS --- */
+    .skills-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .skill-pill {
+      padding: 0.5rem 1rem;
+      background-color: var(--bg-white);
+      border: 1px solid var(--border-200);
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-700);
+      transition: all 0.2s ease;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+    }
+
+    .skill-pill:hover {
+      border-color: var(--text-900);
+      color: var(--text-900);
+      cursor: default;
+    }
+
+    /* --- FOOTER --- */
+    footer {
+      padding: 2rem 0 3rem 0;
+      border-top: 1px solid var(--border-200);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: center;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-500);
+    }
+
+    @media (min-width: 640px) {
+      footer {
+        flex-direction: row;
+        justify-content: space-between;
+      }
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .footer-links a:hover {
+      color: var(--text-900);
+    }
+
+    /* --- BLOG POST CARDS --- */
+    .blog-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .blog-card-link {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .blog-post-card {
+      display: flex;
+      flex-direction: column;
+      padding: 1.25rem;
+      gap: 1.25rem;
+      background-color: var(--bg-white);
+      border: 1px solid var(--border-200);
+      border-radius: 1rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @media (min-width: 640px) {
+      .blog-post-card {
+        flex-direction: row;
+        align-items: stretch;
+        gap: 1.5rem;
+      }
+    }
+
+    .blog-post-card:hover {
+      border-color: var(--border-300);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+      transform: translateY(-2px);
+    }
+
+    .blog-post-thumb {
+      width: 100%;
+      aspect-ratio: 16/9;
+      border-radius: 0.75rem;
+      overflow: hidden;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    @media (min-width: 640px) {
+      .blog-post-thumb {
+        width: 220px;
+        aspect-ratio: 4/3;
+      }
+    }
+
+    .blog-post-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .blog-post-card:hover .blog-post-thumb img {
+      transform: scale(1.05);
+    }
+
+    .blog-post-thumb-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(23, 23, 23, 0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .blog-post-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      flex-grow: 1;
+      gap: 0.5rem;
+    }
+
+    .blog-post-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--text-500);
+    }
+
+    .blog-post-tag {
+      padding: 0.2rem 0.6rem;
+      background: linear-gradient(135deg, #171717 0%, #404040 100%);
+      color: #fff;
+      border-radius: 9999px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .blog-post-title {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--text-900);
+      line-height: 1.4;
+      transition: color 0.2s ease;
+    }
+
+    .blog-post-card:hover .blog-post-title {
+      color: var(--text-600);
+    }
+
+    .blog-post-excerpt {
+      font-size: 0.875rem;
+      color: var(--text-600);
+      line-height: 1.6;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .blog-read-more {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-500);
+      transition: color 0.2s ease;
+      margin-top: 0.25rem;
+    }
+
+    .blog-post-card:hover .blog-read-more {
+      color: var(--text-900);
+    }
+
+    /* --- ICONS --- */
+    svg {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="container">
+
+    <!-- BIO SECTION -->
+    <header class="mb-20">
+      <div class="header-content">
+        <div>
+          <h1 class="header-title">Anuj Mehta</h1>
+          <h2 class="header-role">Software Engineer</h2>
+          <p class="header-desc">
+            I’m a software engineer with a passion for transforming ideas into tangible solutions.
+            Currently, I’m at Google, creating internal tools that empower businesses to achieve remarkable feats.
+            My role encompasses full-stack development, allowing me to engage with both the front-end intricacies
+            using TypeScript and Angular, as well as the back-end mechanics with Java.
+          </p>
+        </div>
+        <div class="profile-photo">
+          <!-- Replace the src below with your actual image path or URL -->
+          <img src="https://lh3.googleusercontent.com/a/ACg8ocJwXO01hV31XslwdUIltw2FgCutoTXIhwNRfvZ1KNDYvhGnP4gi=s600-p"
+            alt="Anuj Mehta">
+        </div>
+      </div>
+
+      <div class="flex gap-4" style="flex-wrap: wrap;">
+        <div class="dropdown">
+          <button class="btn btn-primary" style="cursor: default;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="20" height="16" x="2" y="4" rx="2" />
+              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+            </svg>
+            Get in touch
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              style="margin-left: 0.25rem;">
+              <path d="m6 9 6 6 6-6" />
+            </svg>
+          </button>
+          <div class="dropdown-menu">
+            <a href="mailto:mehta.anuj2309@gmail.com" class="dropdown-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="20" height="16" x="2" y="4" rx="2" />
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+              </svg>
+              Email Me
+            </a>
+            <a href="https://calendly.com/mehta-anuj2309/30min" target="_blank" class="dropdown-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
+                <line x1="16" x2="16" y1="2" y2="6" />
+                <line x1="8" x2="8" y1="2" y2="6" />
+                <line x1="3" x2="21" y1="10" y2="10" />
+                <path d="M8 14h.01" />
+                <path d="M12 14h.01" />
+                <path d="M16 14h.01" />
+                <path d="M8 18h.01" />
+                <path d="M12 18h.01" />
+                <path d="M16 18h.01" />
+              </svg>
+              Schedule Meeting
+            </a>
+          </div>
+        </div>
+        <a href="https://github.com/mehtaanuj95" target="_blank" class="btn btn-secondary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path
+              d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+            <path d="M9 18c-4.51 2-5-2-7-2" />
+          </svg>
+          GitHub
+        </a>
+        <a href="https://www.linkedin.com/in/anujbhaimehta" target="_blank" class="btn btn-secondary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+            <rect width="4" height="12" x="2" y="9" />
+            <circle cx="4" cy="4" r="2" />
+          </svg>
+          LinkedIn
+        </a>
+      </div>
+    </header>
+
+    <!-- BLOG SECTION -->
+    <section class="mb-20" id="blog">
+      <div class="list-header">
+        <h3>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            style="color: var(--text-400);">
+            <path d="M12 19l7-7 3 3-7 7-3-3z" />
+            <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z" />
+            <path d="M2 2l7.586 7.586" />
+            <circle cx="11" cy="11" r="2" />
+          </svg>
+          Blog
+        </h3>
+        <a href="./blogs/index.html" class="list-link">View all posts &rarr;</a>
+      </div>
+      <div class="blog-cards">
+
+        <!-- Blog Post — AI Agents (hidden for now) -->
+        <!--
+        <a href="./blogs/building-ai-agents.html" class="blog-card-link">
+          <article class="blog-post-card">
+            <div class="blog-post-thumb">
+              <img src="./media/deep-research-seq.png" alt="Building AI Agents" />
+              <div class="blog-post-thumb-overlay"></div>
+            </div>
+            <div class="blog-post-info">
+              <div class="blog-post-meta text-mono">
+                <span class="blog-post-tag">AI Engineering</span>
+                <span>Feb 20, 2026</span>
+                <span class="meta-dot">&bull;</span>
+                <span>12 min read</span>
+              </div>
+              <h4 class="blog-post-title">Building AI Agents: A Practical Guide to Autonomous Reasoning Systems</h4>
+              <p class="blog-post-excerpt">A deep dive into the architecture behind modern AI agents — from tool-use
+                patterns and reasoning loops to memory, reflection, and real-world deployment strategies.</p>
+              <span class="blog-read-more">Read article →</span>
+            </div>
+          </article>
+        </a>
+        -->
+
+        <!-- Blog Post 1 — Leh Ladakh Travel -->
+        <a href="./blogs/leh-ladakh-travel.html" class="blog-card-link">
+          <article class="blog-post-card">
+            <div class="blog-post-thumb">
+              <img src="./media/blogs/ladakh/pangong_landscape.jpg" alt="Pangong Lake, Ladakh" />
+              <div class="blog-post-thumb-overlay"></div>
+            </div>
+            <div class="blog-post-info">
+              <div class="blog-post-meta text-mono">
+                <span class="blog-post-tag">Travel</span>
+                <span>Jun 18, 2024</span>
+                <span class="meta-dot">&bull;</span>
+                <span>15 min read</span>
+              </div>
+              <h4 class="blog-post-title">Leh Ladakh – A (Slightly Bumpy) Ride to the Roof of the World!</h4>
+              <p class="blog-post-excerpt">A whirlwind family trip to Leh and Ladakh — engine troubles,
+                Khardung La, Pangong Lake, stargazing at Hanle, and the magic of India's highest roads.</p>
+              <span class="blog-read-more">Read article →</span>
+            </div>
+          </article>
+        </a>
+
+        <!-- Blog Post 2 — Small Chips (Coming Soon) -->
+        <a href="#blog" class="blog-card-link">
+          <article class="blog-post-card">
+            <div class="blog-post-thumb">
+              <img src="./media/small-chips-3nm.png" alt="Small Chips 3nm" />
+              <div class="blog-post-thumb-overlay"></div>
+            </div>
+            <div class="blog-post-info">
+              <div class="blog-post-meta text-mono">
+                <span class="blog-post-tag">Hardware</span>
+                <span>Coming Soon</span>
+              </div>
+              <h4 class="blog-post-title">A Look at Small Chips — From 3nm and Below</h4>
+              <p class="blog-post-excerpt">Exploring the cutting edge of semiconductor fabrication — how transistors
+                shrink beyond 3nm, the physics of electron wavefunctions at atomic scale, and what it means for the
+                future of computing.</p>
+              <span class="blog-read-more">Coming soon</span>
+            </div>
+          </article>
+        </a>
+
+        <!-- Blog Post 3 — Photometric Frequency Analysis -->
+        <a href="./blogs/photometric-frequency-analysis.html" class="blog-card-link">
+          <article class="blog-post-card">
+            <div class="blog-post-thumb">
+              <img src="./media/blogs/photometric/main.png" alt="Photometric Frequency Analysis" />
+              <div class="blog-post-thumb-overlay"></div>
+            </div>
+            <div class="blog-post-info">
+              <div class="blog-post-meta text-mono">
+                <span class="blog-post-tag">Astronomy</span>
+                <span>May 4, 2020</span>
+                <span class="meta-dot">&bull;</span>
+                <span>10 min read</span>
+              </div>
+              <h4 class="blog-post-title">Photometric Frequency Analysis</h4>
+              <p class="blog-post-excerpt">A detailed look at photometric redshift estimation — from SDSS data
+                visualization to Decision Tree regression for galaxy classification.</p>
+              <span class="blog-read-more">Read article →</span>
+            </div>
+          </article>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- READING LIST SECTION -->
+    <section class="mb-20" id="books">
+      <div class="list-header">
+        <h3>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            style="color: var(--text-400);">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+          </svg>
+          Reading List
+        </h3>
+        <a href="./books/index.html" class="list-link">View all books &rarr;</a>
+      </div>
+      <div class="grid-2" style="grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+
+        <div class="video-card" style="text-align: center;">
+          <div class="video-placeholder" style="aspect-ratio: 2/3; border: none; padding: 0;">
+            <img src="https://covers.openlibrary.org/b/isbn/9781098118730-M.jpg" alt="The Staff Engineer's Path Cover"
+              style="width: 100%; height: 100%; object-fit: cover; border-radius: 0.5rem;" />
+          </div>
+          <h4 class="video-title" style="font-size: 0.9rem; line-height: 1.3;">The Staff Engineer's Path</h4>
+          <p class="list-link" style="font-size: 0.75rem;">Tanya Reilly</p>
+        </div>
+
+        <div class="video-card" style="text-align: center;">
+          <div class="video-placeholder" style="aspect-ratio: 2/3; border: none; padding: 0;">
+            <img src="https://covers.openlibrary.org/b/isbn/9781571747075-M.jpg" alt="Physics of the Soul Cover"
+              style="width: 100%; height: 100%; object-fit: cover; border-radius: 0.5rem;" />
+          </div>
+          <h4 class="video-title" style="font-size: 0.9rem; line-height: 1.3;">Physics of the Soul</h4>
+          <p class="list-link" style="font-size: 0.75rem;">Amit Goswami</p>
+        </div>
+
+        <div class="video-card" style="text-align: center;">
+          <div class="video-placeholder" style="aspect-ratio: 2/3; border: none; padding: 0;">
+            <img src="https://covers.openlibrary.org/b/isbn/9781449373320-M.jpg"
+              alt="Designing Data-Intensive Applications Cover"
+              style="width: 100%; height: 100%; object-fit: cover; border-radius: 0.5rem;" />
+          </div>
+          <h4 class="video-title" style="font-size: 0.9rem; line-height: 1.3;">Designing Data-Intensive Applications
+          </h4>
+          <p class="list-link" style="font-size: 0.75rem;">Martin Kleppmann</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- EXPERIENCE SECTION -->
+    <section class="mb-20">
+      <h3 class="section-title">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          style="color: var(--text-400);">
+          <rect width="20" height="14" x="2" y="7" rx="2" ry="2" />
+          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+        </svg>
+        Experience
+      </h3>
+
+      <div class="timeline">
+
+        <!-- Job 1 -->
+        <div class="timeline-item">
+          <div class="timeline-logo">
+            <img src="./media/google.png" alt="Google">
+          </div>
+          <div class="job-header">
+            <h4 class="job-title">Senior Software Engineer (WSE) <span class="job-company">at Google</span></h4>
+            <span class="job-date text-mono">Jun 2021 - Present</span>
+          </div>
+          <p class="job-desc">Working as a Full stack Software Engineer on development of Enterprise Business
+            applications for business stakeholders across Google Ads. FrontEnd: TypeScript, HTML5, CSS. Backend: Java,
+            Apps Framework, Google Cloud Platform.</p>
+        </div>
+
+        <!-- Job 2 -->
+        <div class="timeline-item">
+          <div class="timeline-logo">
+            <img src="./media/tekion-logo.svg" alt="Tekion Corp">
+          </div>
+          <div class="job-header">
+            <h4 class="job-title">Software Engineer <span class="job-company">at Tekion Corp</span></h4>
+            <span class="job-date text-mono">Jan 2021 - Jun 2021</span>
+          </div>
+          <p class="job-desc">Worked as FrontEnd Engineer towards Development of Cloud native Enterprise business
+            Applications. Followed agile methodology for software development and released 3 major features. TechStack:
+            ReactJs, Redux, JavaScript, HTML5, CSS.</p>
+        </div>
+
+        <!-- Job 3 -->
+        <div class="timeline-item">
+          <div class="timeline-logo">
+            <img src="./media/sap-logo.svg" alt="SAP Labs India">
+          </div>
+          <div class="job-header">
+            <h4 class="job-title">Software Developer <span class="job-company">at SAP Labs India</span></h4>
+            <span class="job-date text-mono">Sep 2019 - Jan 2021</span>
+          </div>
+          <p class="job-desc">Worked as Full Stack Developer, developing internal and external tools as part of
+            Intelligent Enterprise solutions team at SAP Labs India. FrontEnd: ReactJS, JavaScript, HTML5. Backend:
+            NestJs, NodeJS, Express, PostgreSQL. Cloud: SAP Cloud Platform, CloudFoundry.</p>
+        </div>
+
+        <!-- Job 4 -->
+        <div class="timeline-item">
+          <div class="timeline-logo">
+            <img src="./media/sap-logo.svg" alt="SAP One Billion Lives">
+          </div>
+          <div class="job-header">
+            <h4 class="job-title">Social Entrepreneur <span class="job-company">at SAP One Billion Lives</span></h4>
+            <span class="job-date text-mono">Jul 2019 - Feb 2020</span>
+          </div>
+          <p class="job-desc">Development of venture through SAP Innovation Venture Incubator with the goal to help
+            people during the time of natural disasters. One of the 16 international teams selected among 600+ ventures.
+            Global ranking - Top 5 finalists. Representing India in the competition across Bangalore, Singapore, Germany
+            and California.</p>
+        </div>
+
+        <!-- Job 5 -->
+        <div class="timeline-item">
+          <div class="timeline-logo">
+            <img src="./media/sap-logo.svg" alt="SAP Labs India">
+          </div>
+          <div class="job-header">
+            <h4 class="job-title">Associate Developer <span class="job-company">at SAP Labs India</span></h4>
+            <span class="job-date text-mono">Jul 2018 - Sep 2019</span>
+          </div>
+          <p class="job-desc">Working as FrontEnd Developer. Built an Application framework - Fiori Elements which
+            generates a full stack application 70% faster than free style creation, reducing the code needed for app
+            creation. FrontEnd: JavaScript, ES6, SAPUI5, XML, HTML, CSS. Backend: NodeJs, Express, CAP CDS. Handled
+            product operations support for customers and stakeholders across Germany, India and USA.</p>
+        </div>
+
+      </div>
+    </section>
+
+
+
+
+
+    <!-- SKILLS SECTION -->
+    <section class="mb-20">
+      <h3 class="section-title">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          style="color: var(--text-400);">
+          <rect width="16" height="16" x="4" y="4" rx="2" />
+          <rect width="6" height="6" x="9" y="9" rx="1" />
+          <path d="M15 2v2" />
+          <path d="M15 20v2" />
+          <path d="M2 15h2" />
+          <path d="M2 9h2" />
+          <path d="M20 15h2" />
+          <path d="M20 9h2" />
+          <path d="M9 2v2" />
+          <path d="M9 20v2" />
+        </svg>
+        Skills & Technologies
+      </h3>
+      <div class="skills-wrapper">
+        <span class="skill-pill">JavaScript</span>
+        <span class="skill-pill">TypeScript</span>
+        <span class="skill-pill">Java</span>
+        <span class="skill-pill">C++</span>
+        <span class="skill-pill">ReactJs</span>
+        <span class="skill-pill">AngularJs</span>
+        <span class="skill-pill">NodeJs</span>
+        <span class="skill-pill">Nest.Js</span>
+        <span class="skill-pill">Express</span>
+        <span class="skill-pill">REST API</span>
+        <span class="skill-pill">HTML5</span>
+        <span class="skill-pill">CSS3</span>
+        <span class="skill-pill">SAPUI5</span>
+        <span class="skill-pill">SQL</span>
+        <span class="skill-pill">PostgreSQL</span>
+        <span class="skill-pill">Google Cloud</span>
+        <span class="skill-pill">SAP Cloud Platform</span>
+        <span class="skill-pill">Cloud Foundry</span>
+        <span class="skill-pill">Algorithms</span>
+        <span class="skill-pill">Deep Learning</span>
+        <span class="skill-pill">Git/GitHub</span>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <p>&copy; <span id="current-year"></span> Anuj Mehta. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="https://github.com/mehtaanuj95" target="_blank">GitHub</a>
+        <a href="https://www.linkedin.com/in/anujbhaimehta" target="_blank">LinkedIn</a>
+        <a href="mailto:mehta.anuj2309@gmail.com">Email</a>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- --- JAVASCRIPT --- -->
+  <script>
+    // Automatically update the copyright year in the footer
+    document.getElementById('current-year').textContent = new Date().getFullYear();
+  </script>
+
+</body>
+
+</html>

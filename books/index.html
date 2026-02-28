@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reading List | Anuj Mehta</title>
+    <meta name="description"
+        content="Books I've read and am planning to read — software engineering, system design, AI, and more.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-body: #fafafa;
+            --bg-white: #ffffff;
+            --bg-neutral-100: #f5f5f5;
+            --bg-neutral-900: #171717;
+            --text-900: #171717;
+            --text-700: #404040;
+            --text-600: #525252;
+            --text-500: #737373;
+            --text-400: #a3a3a3;
+            --text-300: #d4d4d4;
+            --border-100: #f5f5f5;
+            --border-200: #e5e5e5;
+            --border-300: #d4d4d4;
+            --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-900);
+            font-family: var(--font-sans);
+            line-height: 1.8;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        ::selection {
+            background-color: #dbeafe;
+            color: #1e3a5f;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .text-mono {
+            font-family: var(--font-mono);
+        }
+
+        .top-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(250, 250, 250, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-200);
+            padding: 0 1.5rem;
+        }
+
+        .top-nav-inner {
+            max-width: 720px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 56px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-500);
+            transition: color 0.2s ease;
+        }
+
+        .back-link:hover {
+            color: var(--text-900);
+        }
+
+        .nav-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-400);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 50%;
+        }
+
+        .page-wrapper {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem 4rem;
+        }
+
+        @media (min-width: 768px) {
+            .page-wrapper {
+                padding: 4rem 1.5rem 6rem;
+            }
+        }
+
+        .page-header {
+            margin-bottom: 3rem;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+            margin-bottom: 0.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .page-header h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        .page-header p {
+            color: var(--text-600);
+            font-size: 1.05rem;
+        }
+
+        /* --- SECTION DIVIDER --- */
+        .section-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-400);
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-200);
+        }
+
+        .books-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        @media (min-width: 768px) {
+            .books-container {
+                grid-template-columns: 1fr 1fr;
+                gap: 3rem;
+            }
+        }
+
+        /* --- BOOK CARD --- */
+        .book-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .book-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border: 1px solid var(--border-200);
+            border-radius: 1rem;
+            background-color: var(--bg-white);
+            text-align: left;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .book-card:hover {
+            border-color: var(--border-300);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            transform: translateY(-2px);
+        }
+
+        .book-cover {
+            width: 60px;
+            aspect-ratio: 2/3;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .book-cover span {
+            font-size: 1.5rem;
+        }
+
+        .book-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            flex-grow: 1;
+        }
+
+        .book-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-900);
+            line-height: 1.3;
+            margin-bottom: 0.25rem;
+        }
+
+        .book-author {
+            font-size: 0.75rem;
+            color: var(--text-500);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .book-status {
+            display: inline-block;
+            padding: 0.15rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+        }
+
+        .book-status.read {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .book-status.reading {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .book-status.planned {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        /* --- FOOTER --- */
+        .blog-footer {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 3rem;
+            border-top: 1px solid var(--border-200);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-500);
+        }
+
+        @media (min-width: 640px) {
+            .blog-footer {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+        }
+
+        .blog-footer-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .blog-footer-links a {
+            transition: color 0.2s ease;
+        }
+
+        .blog-footer-links a:hover {
+            color: var(--text-900);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .book-card {
+            animation: fadeInUp 0.5s ease both;
+        }
+
+        .book-card:nth-child(1) {
+            animation-delay: 0.05s;
+        }
+
+        .book-card:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .book-card:nth-child(3) {
+            animation-delay: 0.15s;
+        }
+
+        .book-card:nth-child(4) {
+            animation-delay: 0.2s;
+        }
+
+        .book-card:nth-child(5) {
+            animation-delay: 0.25s;
+        }
+
+        .book-card:nth-child(6) {
+            animation-delay: 0.3s;
+        }
+
+        .book-card:nth-child(7) {
+            animation-delay: 0.35s;
+        }
+
+        .book-card:nth-child(8) {
+            animation-delay: 0.4s;
+        }
+
+        .book-card:nth-child(9) {
+            animation-delay: 0.45s;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- TOP NAVIGATION -->
+    <nav class="top-nav">
+        <div class="top-nav-inner">
+            <a href="../index.html" class="back-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m15 18-6-6 6-6" />
+                </svg>
+                Home
+            </a>
+            <span class="nav-title">Reading List</span>
+        </div>
+    </nav>
+
+    <!-- PAGE CONTENT -->
+    <div class="page-wrapper">
+
+        <div class="page-header">
+            <h1>📚 Reading List</h1>
+            <p>Books that shaped my thinking — on software, systems, AI, and life.</p>
+        </div>
+
+        <div class="books-container">
+            <!-- CURRENTLY READING -->
+            <div class="books-section">
+                <p class="section-label">Currently Reading</p>
+                <div class="book-grid">
+
+                    <div class="book-card">
+                        <div class="book-cover" style="padding: 0;">
+                            <img src="https://covers.openlibrary.org/b/isbn/9781098118730-M.jpg"
+                                alt="The Staff Engineer's Path Cover"
+                                style="width: 100%; height: 100%; object-fit: cover;" />
+                        </div>
+                        <div class="book-info">
+                            <h4 class="book-title">The Staff Engineer's Path</h4>
+                            <p class="book-author">Tanya Reilly</p>
+                            <div><span class="book-status reading">Reading</span></div>
+                        </div>
+                    </div>
+
+                    <div class="book-card">
+                        <div class="book-cover" style="padding: 0;">
+                            <img src="https://covers.openlibrary.org/b/isbn/9781571747075-M.jpg"
+                                alt="Physics of the Soul Cover" style="width: 100%; height: 100%; object-fit: cover;" />
+                        </div>
+                        <div class="book-info">
+                            <h4 class="book-title">Physics of the Soul</h4>
+                            <p class="book-author">Amit Goswami</p>
+                            <div><span class="book-status reading">Reading</span></div>
+                        </div>
+                    </div>
+
+                    <div class="book-card">
+                        <div class="book-cover" style="padding: 0;">
+                            <img src="https://covers.openlibrary.org/b/isbn/9781449373320-M.jpg"
+                                alt="Designing Data-Intensive Applications Cover"
+                                style="width: 100%; height: 100%; object-fit: cover;" />
+                        </div>
+                        <div class="book-info">
+                            <h4 class="book-title">Designing Data-Intensive Applications</h4>
+                            <p class="book-author">Martin Kleppmann</p>
+                            <div><span class="book-status reading">Reading</span></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- READ -->
+            <div class="books-section">
+                <p class="section-label">Read</p>
+                <div class="book-grid">
+
+                    <div class="book-card">
+                        <div class="book-cover" style="padding: 0;">
+                            <img src="https://covers.openlibrary.org/b/isbn/9781529360684-M.jpg" alt="Immune Cover"
+                                style="width: 100%; height: 100%; object-fit: cover;" />
+                        </div>
+                        <div class="book-info">
+                            <h4 class="book-title">Immune: A Journey into the Mysterious System That Keeps You Alive
+                            </h4>
+                            <p class="book-author">Philipp Dettmer</p>
+                            <div><span class="book-status read">Read</span></div>
+                        </div>
+                    </div>
+
+                    <div class="book-card">
+                        <div class="book-cover" style="padding: 0;">
+                            <img src="https://covers.openlibrary.org/b/isbn/9780385520690-M.jpg"
+                                alt="Physics of the Impossible Cover"
+                                style="width: 100%; height: 100%; object-fit: cover;" />
+                        </div>
+                        <div class="book-info">
+                            <h4 class="book-title">Physics of the Impossible</h4>
+                            <p class="book-author">Michio Kaku</p>
+                            <div><span class="book-status read">Read</span></div>
+                        </div>
+                    </div>
+
+                    <div class="book-card">
+                        <div class="book-cover" style="padding: 0;">
+                            <img src="https://covers.openlibrary.org/b/isbn/9780385548366-M.jpg"
+                                alt="Quantum Supremacy Cover" style="width: 100%; height: 100%; object-fit: cover;" />
+                        </div>
+                        <div class="book-info">
+                            <h4 class="book-title">Quantum Supremacy</h4>
+                            <p class="book-author">Michio Kaku</p>
+                            <div><span class="book-status read">Read</span></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="blog-footer">
+        <p>&copy; <span id="current-year"></span> Anuj Mehta. All rights reserved.</p>
+        <div class="blog-footer-links">
+            <a href="https://github.com/mehtaanuj95" target="_blank">GitHub</a>
+            <a href="https://www.linkedin.com/in/anujbhaimehta" target="_blank">LinkedIn</a>
+            <a href="mailto:mehta.anuj2309@gmail.com">Email</a>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photometric Frequency Analysis | Blog</title>
+    <meta name="description"
+        content="A detailed description of Photometric frequency analysis — redshift estimation, SDSS data visualization, and Decision Tree regression for galaxy classification.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        /* --- CSS VARIABLES --- */
+        :root {
+            --bg-body: #fafafa;
+            --bg-white: #ffffff;
+            --bg-neutral-100: #f5f5f5;
+            --bg-neutral-900: #171717;
+            --text-900: #171717;
+            --text-700: #404040;
+            --text-600: #525252;
+            --text-500: #737373;
+            --text-400: #a3a3a3;
+            --text-300: #d4d4d4;
+            --border-100: #f5f5f5;
+            --border-200: #e5e5e5;
+            --border-300: #d4d4d4;
+            --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        }
+
+        /* --- RESET --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-900);
+            font-family: var(--font-sans);
+            line-height: 1.8;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        ::selection {
+            background-color: #dbeafe;
+            color: #1e3a5f;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* --- TOP NAV --- */
+        .top-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(250, 250, 250, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-200);
+            padding: 0 1.5rem;
+        }
+
+        .top-nav-inner {
+            max-width: 720px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 56px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-500);
+            transition: color 0.2s ease;
+        }
+
+        .back-link:hover {
+            color: var(--text-900);
+        }
+
+        .nav-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-400);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 50%;
+        }
+
+        /* --- HERO --- */
+        .hero {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 21/9;
+            overflow: hidden;
+            background: var(--bg-neutral-900);
+        }
+
+        .hero img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.7;
+            transition: transform 0.6s ease;
+        }
+
+        .hero:hover img {
+            transform: scale(1.02);
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom,
+                    rgba(23, 23, 23, 0.1) 0%,
+                    rgba(23, 23, 23, 0.5) 50%,
+                    rgba(23, 23, 23, 0.85) 100%);
+        }
+
+        .hero-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 2rem 1.5rem;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 768px) {
+            .hero-content {
+                padding: 3rem 1.5rem;
+            }
+        }
+
+        .hero-tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .hero h1 {
+            color: #fff;
+            font-size: 1.75rem;
+            font-weight: 800;
+            line-height: 1.2;
+            letter-spacing: -0.025em;
+            margin-bottom: 0.75rem;
+        }
+
+        @media (min-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        .hero-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .hero-meta-dot {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* --- ARTICLE --- */
+        .article-wrapper {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem 4rem;
+        }
+
+        @media (min-width: 768px) {
+            .article-wrapper {
+                padding: 4rem 1.5rem 6rem;
+            }
+        }
+
+        .article-body h2 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-900);
+            margin: 3rem 0 1rem;
+            letter-spacing: -0.025em;
+            line-height: 1.3;
+        }
+
+        .article-body h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-900);
+            margin: 2.5rem 0 0.75rem;
+            letter-spacing: -0.015em;
+        }
+
+        .article-body p {
+            color: var(--text-700);
+            font-size: 1.05rem;
+            line-height: 1.85;
+            margin-bottom: 1.5rem;
+        }
+
+        /* --- LEAD PARAGRAPH --- */
+        .lead {
+            font-size: 1.15rem;
+            color: var(--text-600);
+            border-left: 3px solid var(--bg-neutral-900);
+            padding-left: 1.25rem;
+            margin-bottom: 2.5rem;
+            line-height: 1.8;
+        }
+
+        /* --- INLINE IMAGE --- */
+        .article-image {
+            margin: 2.5rem 0;
+            border-radius: 1rem;
+            overflow: hidden;
+            border: 1px solid var(--border-200);
+            background: var(--bg-white);
+        }
+
+        .article-image img {
+            width: 100%;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+
+        .article-image:hover img {
+            transform: scale(1.01);
+        }
+
+        .article-image figcaption {
+            padding: 0.75rem 1.25rem;
+            font-size: 0.8rem;
+            color: var(--text-500);
+            text-align: center;
+            border-top: 1px solid var(--border-100);
+            font-weight: 500;
+        }
+
+        .article-image-half {
+            margin: 1.5rem 0;
+            border-radius: 1rem;
+            overflow: hidden;
+            border: 1px solid var(--border-200);
+            background: var(--bg-white);
+        }
+
+        .article-image-half img {
+            width: 100%;
+            display: block;
+        }
+
+        .image-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 2.5rem 0;
+        }
+
+        @media (max-width: 640px) {
+            .image-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* --- CODE BLOCK --- */
+        .code-block {
+            margin: 2rem 0;
+            background: var(--bg-neutral-900);
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .code-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1.25rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .code-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .code-dots span {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .code-dots span:nth-child(1) {
+            background: #ff5f56;
+        }
+
+        .code-dots span:nth-child(2) {
+            background: #ffbd2e;
+        }
+
+        .code-dots span:nth-child(3) {
+            background: #27c93f;
+        }
+
+        .code-lang {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .code-block pre {
+            padding: 1.25rem 1.5rem;
+            overflow-x: auto;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            line-height: 1.7;
+            color: #e4e4e7;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* --- TABLE --- */
+        .article-body table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            display: block;
+        }
+
+        .article-body th,
+        .article-body td {
+            padding: 0.5rem 0.75rem;
+            text-align: left;
+            border: 1px solid var(--border-200);
+        }
+
+        .article-body th {
+            background: var(--bg-neutral-100);
+            font-weight: 600;
+            color: var(--text-900);
+        }
+
+        .article-body td {
+            color: var(--text-700);
+        }
+
+        /* --- DIVIDER --- */
+        .article-divider {
+            border: none;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--border-200), transparent);
+            margin: 3rem 0;
+        }
+
+        /* --- TAGS --- */
+        .article-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 2.5rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-200);
+        }
+
+        .article-tag {
+            padding: 0.35rem 0.85rem;
+            background: var(--bg-white);
+            border: 1px solid var(--border-200);
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-600);
+            transition: all 0.2s ease;
+        }
+
+        .article-tag:hover {
+            border-color: var(--text-900);
+            color: var(--text-900);
+        }
+
+        /* --- BOTTOM NAV --- */
+        .bottom-nav {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 1.5rem 4rem;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-neutral-900);
+            color: #fff;
+            border-radius: 0.75rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .back-btn:hover {
+            background: #262626;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        /* --- FOOTER --- */
+        .blog-footer {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 3rem;
+            border-top: 1px solid var(--border-200);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-500);
+        }
+
+        @media (min-width: 640px) {
+            .blog-footer {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+        }
+
+        .blog-footer-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .blog-footer-links a {
+            transition: color 0.2s ease;
+        }
+
+        .blog-footer-links a:hover {
+            color: var(--text-900);
+        }
+
+        /* --- READING PROGRESS BAR --- */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #171717 0%, #525252 100%);
+            z-index: 200;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        /* --- SMOOTH REVEAL ANIMATION --- */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .article-body>* {
+            animation: fadeInUp 0.5s ease both;
+        }
+
+        .article-body>*:nth-child(1) {
+            animation-delay: 0.05s;
+        }
+
+        .article-body>*:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .article-body>*:nth-child(3) {
+            animation-delay: 0.15s;
+        }
+
+        .article-body>*:nth-child(4) {
+            animation-delay: 0.2s;
+        }
+
+        .article-body>*:nth-child(5) {
+            animation-delay: 0.25s;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- READING PROGRESS -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- TOP NAVIGATION -->
+    <nav class="top-nav">
+        <div class="top-nav-inner">
+            <a href="./index.html" class="back-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m15 18-6-6 6-6" />
+                </svg>
+                All Posts
+            </a>
+            <span class="nav-title">Photometric Frequency Analysis</span>
+        </div>
+    </nav>
+
+    <!-- HERO BANNER -->
+    <div class="hero">
+        <img src="../media/blogs/photometric/main.png" alt="Photometric Frequency Analysis">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <span class="hero-tag">Astronomy</span>
+            <h1>Photometric Frequency Analysis</h1>
+            <div class="hero-meta">
+                <span>May 4, 2020</span>
+                <span class="hero-meta-dot">&bull;</span>
+                <span>10 min read</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ARTICLE BODY -->
+    <article class="article-wrapper">
+        <div class="article-body">
+
+            <p class="lead">
+                This objective of this article is to present a detailed description of Photometric frequency analysis
+                and why it is important, along with how do we do data visualization on large datasets.
+            </p>
+
+            <p>
+                This article contains a few excerpts from scikit-learn <a
+                    href="https://ogrisel.github.io/scikit-learn.org/sklearn-tutorial/tutorial/astronomy/regression.html"
+                    target="_blank" style="text-decoration: underline;">Photometric Frequency Analysis</a> post. Also, I
+                used <a href="https://www.coursera.org/learn/data-driven-astronomy" target="_blank"
+                    style="text-decoration: underline;">Data Driven Astronomy</a> as a reference while composing this
+                post.
+            </p>
+
+            <p>
+                In the current standard cosmological model, the universe began nearly 14 billion years ago, in an
+                explosive event commonly known as the Big Bang. Since then, the very fabric of space has been expanding,
+                so that distant galaxies appear to be moving away from us at very fast speeds. The uniformity of this
+                expansion means that there is a relationship between the distance to a galaxy, and the speed that it
+                appears to be receding from us. This recession speed leads to a shift in the frequency of photons, very
+                similar to the audio doppler shift that can be heard when a car blaring its horn passes by. If a galaxy
+                were moving toward us, its light would be shifted to higher frequencies, or blue-shifted. Because the
+                universe is expanding away from us, distant galaxies appear to be red-shifted: their photons are shifted
+                to lower frequencies.
+            </p>
+
+            <p>
+                We're going to use decision trees to determine the redshifts of galaxies from their photometric colors.
+                We'll use galaxies whose accurate spectroscopic redshifts have been calculated as our gold standard
+            </p>
+
+            <p>
+                We will be using flux magnitudes from the <a href="https://www.sdss.org/" target="_blank"
+                    style="text-decoration: underline;">Sloan Digital Sky Survey</a> (SDSS) catalogue to create color
+                indices. Flux magnitudes are the total flux (or light) received in five frequency bands (<em>u</em>,
+                <em>g</em>, <em>r</em>, <em>i</em> and <em>z</em>).
+            </p>
+
+            <figure class="article-image">
+                <img src="../media/blogs/photometric/sdss_filters.png" alt="SDSS Filter Bands">
+                <figcaption>SDSS filter frequency bands</figcaption>
+            </figure>
+
+            <p>
+                The <em>astronomical color</em> (or <em>color index</em>) is the difference between the magnitudes of
+                two filters, i.e. <em>u - g</em> or <em>i - z</em>. This index is one way to characterize the colors of
+                galaxies. For example, if the u-g index is high then the object is brighter in ultra violet frequencies
+                than it is in visible green frequencies.
+            </p>
+
+            <p>
+                Color indices act as an approximation for the spectrum of the object and are useful for classifying
+                stars into different types.
+            </p>
+
+            <p>
+                So, lets dive a little deeper into the SDSS data.
+            </p>
+
+            <p>
+                We can load the data using numpy and then convert it into a dataframe and view the first 10 rows using
+                the head() function of pandas.
+            </p>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <div class="code-dots"><span></span><span></span><span></span></div>
+                    <span class="code-lang">Python</span>
+                </div>
+                <pre><code>data = np.load('sdss_galaxy_colors (1).npy')
+df = pd.DataFrame(data)
+df.head(10)</code></pre>
+            </div>
+
+            <p>
+                Also, its a good practice to look into the statistical measures about our sample. They usually give us
+                more information about the distribution of data.
+            </p>
+
+            <p>
+                Also, we can visualize the distribution of data in different frequency bands.
+            </p>
+
+            <div class="image-row">
+                <figure class="article-image-half">
+                    <img src="../media/blogs/photometric/sdss_u_band.png" alt="u band frequency distribution">
+                </figure>
+                <figure class="article-image-half">
+                    <img src="../media/blogs/photometric/sdss_g_band.png" alt="g band frequency distribution">
+                </figure>
+            </div>
+
+            <p>
+                The above images show the frequency distribution of <strong>u</strong> and <strong>g</strong> bands
+                respectively.
+            </p>
+
+            <p>
+                But we could also plot the distribution of all the frequency bands together.
+            </p>
+
+            <figure class="article-image">
+                <img src="../media/blogs/photometric/sdss_together.png" alt="All frequency bands together">
+                <figcaption>Distribution of all frequency bands plotted together</figcaption>
+            </figure>
+
+            <p>
+                Similarly, we can plot all the different frequency bands against the redshift.
+            </p>
+
+            <figure class="article-image">
+                <img src="../media/blogs/photometric/sdss_together_redshift.png" alt="Frequency bands vs redshift">
+                <figcaption>Frequency bands plotted against the redshift</figcaption>
+            </figure>
+
+            <p>
+                Now to obtain different colors, we'll subtract the frequency bands, i.e. u-g, g-r etc. After plotting
+                this, this looks like this.
+            </p>
+
+            <div class="image-row">
+                <figure class="article-image-half">
+                    <img src="../media/blogs/photometric/sdss_u-g.png" alt="u-g color index">
+                </figure>
+                <figure class="article-image-half">
+                    <img src="../media/blogs/photometric/sdss_g-r.png" alt="g-r color index">
+                </figure>
+            </div>
+
+            <p>
+                We can again plot them together to obtain something like this.
+            </p>
+
+            <figure class="article-image">
+                <img src="../media/blogs/photometric/sdss_difference_together.png" alt="Color indices plotted together">
+                <figcaption>Difference frequency bands plotted together</figcaption>
+            </figure>
+
+            <p>
+                We can also plot a correlation of different features. This map gives us much needed understanding about
+                what effect one parameter has on other parameter.
+            </p>
+
+            <figure class="article-image">
+                <img src="../media/blogs/photometric/corellation.png" alt="Correlation map">
+                <figcaption>Correlation map of different features</figcaption>
+            </figure>
+
+            <p>
+                Also, we can plot a scatter plot of all the features combines.
+            </p>
+
+            <figure class="article-image">
+                <img src="../media/blogs/photometric/scatter_together.png" alt="Scatter plot of all features">
+                <figcaption>Scatter plot of all features combined</figcaption>
+            </figure>
+
+            <hr class="article-divider">
+
+            <p>
+                Enough with data visualization <strong>!!</strong> Lets write some code.
+            </p>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <div class="code-dots"><span></span><span></span><span></span></div>
+                    <span class="code-lang">Python</span>
+                </div>
+                <pre><code>features = np.zeros((data.shape[0], 4))
+features[:,0] = data['u'] - data['g']
+features[:,1] = data['g'] - data['r']
+features[:,2] = data['r'] - data['i']
+features[:,3] = data['i'] - data['z']
+  
+targets = np.zeros(data.shape[0])
+targets = data['redshift']</code></pre>
+            </div>
+
+            <p>
+                Here we are creating features and targets for our classifier.
+            </p>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <div class="code-dots"><span></span><span></span><span></span></div>
+                    <span class="code-lang">Python</span>
+                </div>
+                <pre><code>from sklearn.tree import DecisionTreeRegressor
+dtr = DecisionTreeRegressor(max_depth=3)
+model = dtr</code></pre>
+            </div>
+
+            <p>
+                Then we import the DecisionTreeRegression from the scikit learn library and instantiate it with a
+                maximum tree depth of 3. This is usually done to prevent overfitting.
+            </p>
+
+            <p>
+                Now lets divide our data into training and testing data so that we can see how well our classifier is
+                performing.
+            </p>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <div class="code-dots"><span></span><span></span><span></span></div>
+                    <span class="code-lang">Python</span>
+                </div>
+                <pre><code># split the data into training and testing features and predictions
+split = 45000
+train_features = features[:split]
+test_features = features[split:]
+  
+train_targets = targets[:split]
+test_targets = targets[split:]
+model.fit(train_features, train_targets)
+# get the predicted_redshifts
+predictions = model.predict(test_features)
+print('Median difference: {:f}'.format(np.median(np.abs(test_targets - predictions))))</code></pre>
+            </div>
+
+            <p>
+                When this chunk of code is executed, we get the result as <strong>Median difference: 0.038271</strong>
+                which is quite a good accuracy (<strong>almost 97%!!</strong>).
+            </p>
+
+            <p>
+                To understand the distribution of frequency band's difference (u-g etc.), we can further visualize them
+                using the code below.
+            </p>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <div class="code-dots"><span></span><span></span><span></span></div>
+                    <span class="code-lang">Python</span>
+                </div>
+                <pre><code>cmap = plt.get_cmap('YlOrRd')
+redshift = data['redshift']
+# Create the plot with plt.scatter and plt.colorbar
+plot = plt.scatter(u_g, r_i, s=2, lw=0, c=redshift, cmap=cmap)
+cb = plt.colorbar(plot)
+cb.set_label('Redshift')
+plt.xlabel('Colour index  u-g')
+plt.ylabel('Colour index  r-i')
+plt.title('Redshift (colour) u-g versus r-i')
+# Set any axis limits
+plt.xlim(-0.5, 2.5)
+plt.ylim(-0.5, 1)
+    
+plt.show()</code></pre>
+            </div>
+
+            <div class="image-row">
+                <figure class="article-image-half">
+                    <img src="../media/blogs/photometric/final_result1.png" alt="Redshift color plot 1">
+                </figure>
+                <figure class="article-image-half">
+                    <img src="../media/blogs/photometric/final_result2.png" alt="Redshift color plot 2">
+                </figure>
+            </div>
+
+            <hr class="article-divider">
+
+            <p>
+                On the conclusion, Obtaining an accurate estimate of the redshift to each of these galaxies is a pivotal
+                part for knowing the galaxy's history, composition and fate. Since there are so many extremely faint
+                galaxies, there is no possibility of obtaining a spectrum for each one. Thus sophisticated photometric
+                redshift codes will be required to advance our understanding of the Universe, including more precisely
+                understanding the nature of the dark energy that is currently accelerating the cosmic expansion.
+            </p>
+
+            <!-- TAGS -->
+            <div class="article-tags">
+                <span class="article-tag">Astronomy</span>
+                <span class="article-tag">Data Science</span>
+                <span class="article-tag">Machine Learning</span>
+                <span class="article-tag">Python</span>
+                <span class="article-tag">SDSS</span>
+                <span class="article-tag">Redshift</span>
+            </div>
+
+        </div>
+    </article>
+
+    <!-- BACK NAVIGATION -->
+    <div class="bottom-nav">
+        <a href="./index.html" class="back-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m15 18-6-6 6-6" />
+            </svg>
+            Back to all posts
+        </a>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="blog-footer">
+        <p>&copy; <span id="current-year"></span> Anuj Mehta. All rights reserved.</p>
+        <div class="blog-footer-links">
+            <a href="https://github.com/mehtaanuj95" target="_blank">GitHub</a>
+            <a href="https://www.linkedin.com/in/anujbhaimehta" target="_blank">LinkedIn</a>
+            <a href="mailto:mehta.anuj2309@gmail.com">Email</a>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script>
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = (scrollTop / docHeight) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        });
+    </script>
+
+</body>
+
+</html>
